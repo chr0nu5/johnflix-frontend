@@ -43,6 +43,12 @@ const LoginLogo = styled.div`
   position: absolute;
   left: 24px;
   top: 24px;
+
+  @media (max-width: 1024px) {
+    text-align: center;
+    width: 100%;
+    left: 0px;
+  }
 `;
 
 const LoginTitle = styled.div`

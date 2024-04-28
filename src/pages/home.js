@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
+import Api from "../libs/api";
+import Storage from "../libs/storage";
+
+import Display from "../components/display";
+import Slider from "../components/slider";
+
 const Holder = styled.div`
-  padding: 10px;
-  @media (max-width: 768px) {
+  width: 100%;
+  @media (max-width: 1024px) {
   }
 `;
 
 export default function Home() {
-  // states
-  const [height, setHeight] = useState(window.innerHeight);
-  const [width, setWidth] = useState(window.innerWidth);
+  const api = Api();
+  const storage = Storage();
 
-  function handleWindowSizeChange() {
-    setHeight(window.innerHeight);
-    setWidth(window.innerWidth);
-  }
+  const [randomItems, setRandomItems] = useState([]);
+
+  const getData = async () => {
+    const token = storage.getItem("token");
+    const random = await api.getRandom(token, "movies", 0);
+    setRandomItems(random);
+  };
 
   useEffect(() => {
-    window.addEventListener("resize", handleWindowSizeChange);
-    window.addEventListener("load", handleWindowSizeChange);
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Holder>
-      {width} : {height}
+      {randomItems.length > 0 && <Display items={randomItems} hidden={0} />}
+      <Slider height={160} />
     </Holder>
   );
 }
