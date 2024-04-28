@@ -184,7 +184,10 @@ export default function Menu({ hidden }) {
                 {menuItems.map((menuItem) => {
                   return (
                     <MenuItem
-                      href={`/${menuItem.path}/${menuItem.hash}`}
+                      href={"#"}
+                      onClick={() => {
+                        navigate(`/${menuItem.path}/${menuItem.hash}`);
+                      }}
                       style={{ color: "#fff" }}
                     >
                       {menuItem.title}
@@ -202,7 +205,10 @@ export default function Menu({ hidden }) {
             return (
               <MenuItem
                 className="desktop"
-                href={`/${menuItem.path}/${menuItem.hash}`}
+                href={"#"}
+                onClick={() => {
+                  navigate(`/${menuItem.path}/${menuItem.hash}`);
+                }}
               >
                 {menuItem.title}
               </MenuItem>

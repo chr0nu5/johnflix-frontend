@@ -69,11 +69,9 @@ export default function Display({ items, hidden }) {
   const helper = Helper();
 
   const [height, setHeight] = useState(window.innerHeight);
-  // const [width, setWidth] = useState(window.innerWidth);
 
   function handleWindowSizeChange() {
     setHeight(window.innerHeight);
-    // setWidth(window.innerWidth);
   }
 
   useEffect(() => {
@@ -107,7 +105,7 @@ export default function Display({ items, hidden }) {
               )}
             </ContentTags>
             <Button
-              style={{ marginBottom: 16 }}
+              style={{ marginBottom: 64 }}
               type="primary"
               size={"large"}
               icon={<CaretRightOutlined />}
@@ -118,7 +116,7 @@ export default function Display({ items, hidden }) {
               PLAY
             </Button>
           </Page>
-          <Slider height={160} items={items} />
+          <Slider title={"Recommended for you"} items={items} />
         </Content>
       </Featured>
     </Holder>
