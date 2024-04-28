@@ -1,4 +1,6 @@
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL
+  ? process.env.REACT_APP_API_URL
+  : "http://localhost:8000";
 
 export default function Api() {
   const login = async function (username, password) {
