@@ -63,6 +63,27 @@ const Element = styled.div`
   }
 `;
 
+const Progress = styled.div`
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 8px;
+  height: 4px;
+  z-index: 1;
+  background-color: hsla(0, 0%, 100%, 0.3);
+  overflow: hidden;
+  border-radius: 10px;
+`;
+
+const ProgressBar = styled.div`
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 50%;
+  height: 4px;
+  background-color: #e50914;
+`;
+
 const ElementContent = styled.div`
   position: absolute;
   left: 0px;
@@ -91,6 +112,15 @@ export default function Slider({ title, items, spaceTop }) {
                     <ElementContent
                       style={{ backgroundImage: `url(${item.image})` }}
                     ></ElementContent>
+                    {item.time && (
+                      <Progress>
+                        <ProgressBar
+                          style={{
+                            width: `${(item.time / item.duration) * 100}%`,
+                          }}
+                        />
+                      </Progress>
+                    )}
                   </Element>
                 );
               })}

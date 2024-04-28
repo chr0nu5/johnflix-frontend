@@ -18,12 +18,16 @@ export default function Home() {
   const storage = Storage();
 
   const [randomItems, setRandomItems] = useState([]);
+  const [watchingItems, setWatchingItems] = useState([]);
   const [latestItems, setLatestItems] = useState([]);
 
   const getData = async () => {
     const token = storage.getItem("token");
     const random = await api.getRandom(token, "movies", 0);
     setRandomItems(random);
+
+    const watching = await api.getWatching(token, 0);
+    setWatchingItems(watching.movies);
 
     const latest = await api.getLatest(token, "movies", 0);
     setLatestItems(latest);
@@ -37,6 +41,13 @@ export default function Home() {
   return (
     <Holder>
       {randomItems.length > 0 && <Display items={randomItems} hidden={0} />}
+      {watchingItems.length > 0 && (
+        <Slider
+          items={watchingItems}
+          title={"Continue Watching"}
+          spaceTop={32}
+        />
+      )}
       {latestItems.length > 0 && (
         <Slider items={latestItems} title={"Recently Released"} spaceTop={32} />
       )}
