@@ -64,7 +64,6 @@ const ElementContent = styled.div`
   top: 0px;
   right: 8px;
   bottom: 0px;
-  background: #f00;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
