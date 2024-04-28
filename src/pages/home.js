@@ -18,11 +18,15 @@ export default function Home() {
   const storage = Storage();
 
   const [randomItems, setRandomItems] = useState([]);
+  const [latestItems, setLatestItems] = useState([]);
 
   const getData = async () => {
     const token = storage.getItem("token");
     const random = await api.getRandom(token, "movies", 0);
     setRandomItems(random);
+
+    const latest = await api.getLatest(token, "movies", 0);
+    setLatestItems(latest);
   };
 
   useEffect(() => {
@@ -33,7 +37,9 @@ export default function Home() {
   return (
     <Holder>
       {randomItems.length > 0 && <Display items={randomItems} hidden={0} />}
-      <Slider height={160} />
+      {latestItems.length > 0 && (
+        <Slider items={latestItems} title={"Recently Released"} spaceTop={32} />
+      )}
     </Holder>
   );
 }

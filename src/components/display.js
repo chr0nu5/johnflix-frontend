@@ -188,7 +188,7 @@ export default function Display({ items, hidden }) {
               )}
             </ContentTags>
             <Button
-              style={{ marginBottom: 40 }}
+              style={{ marginBottom: 32 }}
               type="primary"
               size={"large"}
               icon={<CaretRightOutlined />}

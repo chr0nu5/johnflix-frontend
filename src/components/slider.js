@@ -48,6 +48,11 @@ const Element = styled.div`
   width: 20%;
   height: 230px;
   position: relative;
+  z-index: 0;
+
+  &:hover {
+    z-index: 1;
+  }
 
   @media (max-width: 1536px) {
     width: 33.33333333333333%;
@@ -72,10 +77,10 @@ const ElementContent = styled.div`
   background-repeat: no-repeat;
 `;
 
-export default function Slider({ title, items }) {
+export default function Slider({ title, items, spaceTop }) {
   return (
     items && (
-      <Holder>
+      <Holder style={{ marginTop: spaceTop }}>
         <ContentHolder>
           <Page>
             <Title>{title}</Title>
