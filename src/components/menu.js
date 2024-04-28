@@ -17,7 +17,7 @@ const Holder = styled.div`
   width: 100%;
   background-image: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.7) 10%,
+    rgba(0, 0, 0, 0.6) 10%,
     transparent
   );
   z-index: 1;

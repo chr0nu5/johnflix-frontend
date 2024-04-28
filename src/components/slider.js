@@ -5,7 +5,7 @@ const Holder = styled.div`
   background-image: linear-gradient(
     0deg,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0) 100%
+    rgba(0, 0, 0, 0) 90%
   );
   @media (max-width: 1024px) {
   }
