@@ -4,7 +4,7 @@ export default function storage() {
   };
 
   const saveItem = (item, data) => {
-    localStorage.setItem(item, JSON.stringify(data));
+    localStorage.setItem(item, data);
     return true;
   };
 
