@@ -1,1 +1,1 @@
-# johnflix-frontend
+# JohnFLIX
