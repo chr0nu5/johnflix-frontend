@@ -14,11 +14,20 @@ const Holder = styled.div`
   width: 100%;
   overflow-x: scroll;
   height: 300px;
+
+  &.list {
+    overflow: auto;
+    height: auto;
+  }
 `;
 
 const ContentHolder = styled.div`
   width: 100%;
   height: 300px;
+
+  &.list {
+    height: auto;
+  }
 `;
 
 const Title = styled.div`
@@ -39,6 +48,13 @@ const ElementHolder = styled.div`
   width: 100%;
   height: 230px;
 
+  &.list {
+    display: block;
+    flex-wrap: inherit;
+    overflow-x: auto;
+    height: auto;
+  }
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -54,16 +70,29 @@ const Element = styled.div`
   z-index: 0;
   transition: 0.5s;
 
+  &.list {
+    flex: auto;
+    float: left;
+    margin-bottom: 8px;
+    width: 20%;
+  }
+
   &:hover {
     z-index: 1;
   }
 
   @media (max-width: 1536px) {
     width: 30%;
+    &.list {
+      width: 33.333333333333333%;
+    }
   }
 
   @media (max-width: 1024px) {
     width: 48%;
+    &.list {
+      width: 50%;
+    }
   }
 `;
 
@@ -131,7 +160,7 @@ const ItemTitle = styled.div`
   left: 8px;
   bottom: 8px;
   right: 8px;
-  font-size: 32px;
+  font-size: 24px;
 
   span {
     display: block;
@@ -173,19 +202,23 @@ const Heart = styled.div`
   right: 12px;
   top: 8px;
   z-index: 2;
+
+  svg {
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 1));
+  }
 `;
 
-export default function Slider({ title, items, spaceTop }) {
+export default function Slider({ isList, title, items, spaceTop }) {
   return (
     items && (
-      <Holder style={{ marginTop: spaceTop }}>
-        <ContentHolder>
+      <Holder style={{ marginTop: spaceTop }} className={isList ? "list" : ""}>
+        <ContentHolder className={isList ? "list" : ""}>
           <Page>
             <Title>{title}</Title>
-            <ElementHolder>
+            <ElementHolder className={isList ? "list" : ""}>
               {items.map((item) => {
                 return (
-                  <Element>
+                  <Element className={isList ? "list" : ""}>
                     <ElementContent
                       style={{ backgroundImage: `url(${item.image})` }}
                     >
