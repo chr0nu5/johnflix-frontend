@@ -20,7 +20,12 @@ const Holder = styled.div`
     rgba(0, 0, 0, 0.6) 10%,
     transparent
   );
-  z-index: 1;
+  z-index: 99;
+  transition: 1s;
+
+  &.black {
+    background: rgba(0, 0, 0, 0.9);
+  }
 
   @media (max-width: 1024px) {
   }
@@ -164,8 +169,22 @@ export default function Menu({ hidden }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [black, setBlack] = useState(false);
+
+  function handleWindowScroll() {
+    if (window.scrollY > 0) {
+      setBlack(true);
+    } else {
+      setBlack(false);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleWindowScroll);
+  }, []);
+
   return (
-    <Holder>
+    <Holder className={black ? "black" : ""}>
       <Page>
         <MenuHolder>
           <Logo>

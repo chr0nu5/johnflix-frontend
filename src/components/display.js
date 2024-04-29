@@ -37,7 +37,7 @@ const FeaturedBlur = styled.div`
   top: 0px;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: 1;
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(8px);
 `;
@@ -49,7 +49,7 @@ const FeaturedVideo = styled.div`
   top: 0px;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 0;
   opacity: 0;
   transition: 1s;
   pointer-events: none;

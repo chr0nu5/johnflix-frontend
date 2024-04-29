@@ -65,10 +65,10 @@ const Element = styled.div`
 
 const Progress = styled.div`
   position: absolute;
-  bottom: 0px;
-  left: 0px;
-  right: 8px;
-  height: 4px;
+  bottom: 8px;
+  left: 8px;
+  right: 16px;
+  height: 8px;
   z-index: 1;
   background-color: hsla(0, 0%, 100%, 0.3);
   overflow: hidden;
@@ -80,7 +80,7 @@ const ProgressBar = styled.div`
   bottom: 0px;
   left: 0px;
   width: 50%;
-  height: 4px;
+  height: 8px;
   background-color: #e50914;
 `;
 
