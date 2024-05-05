@@ -98,7 +98,7 @@ const Element = styled.div`
 
 const Progress = styled.div`
   position: absolute;
-  bottom: 8px;
+  top: 8px;
   left: 8px;
   right: 16px;
   height: 8px;
@@ -222,7 +222,7 @@ export default function Slider({ isList, title, items, spaceTop }) {
                     <ElementContent
                       style={{ backgroundImage: `url(${item.image})` }}
                     >
-                      <Heart>
+                      <Heart style={{ top: item.time ? 24 : 8 }}>
                         <Watchlist initial={item.watchlist} hash={item.hash} />
                       </Heart>
                       <ElementContentOverlay>

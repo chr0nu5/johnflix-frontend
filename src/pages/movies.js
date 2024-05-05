@@ -13,14 +13,13 @@ const Holder = styled.div`
   }
 `;
 
-export default function Home() {
+export default function Movies() {
   const api = Api();
   const storage = Storage();
 
   const [randomItems, setRandomItems] = useState([]);
-  const [watchingMovies, setWatchingMovies] = useState([]);
-  const [watchingEpisodes, setWatchingEpisodes] = useState([]);
-  const [latestItems, setLatestItems] = useState([]);
+  const [watchingItems, setWatchingItems] = useState([]);
+  const [playlistItems, setPlaylistItems] = useState([]);
 
   const getData = async () => {
     const token = storage.getItem("token");
@@ -28,11 +27,10 @@ export default function Home() {
     setRandomItems(random);
 
     const watching = await api.getWatching(token, 0);
-    setWatchingMovies(watching.movies);
-    setWatchingEpisodes(watching.episodes);
+    setWatchingItems(watching.movies);
 
-    const latest = await api.getLatest(token, "movies", 0);
-    setLatestItems(latest);
+    const playlists = await api.getPlaylists(token, 0);
+    setPlaylistItems(playlists);
   };
 
   useEffect(() => {
@@ -43,23 +41,18 @@ export default function Home() {
   return (
     <Holder>
       {randomItems.length > 0 && <Display items={randomItems} hidden={0} />}
-      {latestItems.length > 0 && (
-        <Slider items={latestItems} title={"Recently Released"} spaceTop={32} />
-      )}
-      {watchingMovies.length > 0 && (
+      {watchingItems.length > 0 && (
         <Slider
-          items={watchingMovies}
-          title={"Continue Watching (Movies)"}
+          items={watchingItems}
+          title={"Continue Watching"}
           spaceTop={32}
         />
       )}
-      {watchingEpisodes.length > 0 && (
-        <Slider
-          items={watchingEpisodes}
-          title={"Continue Watching (Episodes)"}
-          spaceTop={32}
-        />
-      )}
+      {playlistItems.map((playlist) => {
+        return (
+          <Slider items={playlist.items} title={playlist.title} spaceTop={32} />
+        );
+      })}
     </Holder>
   );
 }

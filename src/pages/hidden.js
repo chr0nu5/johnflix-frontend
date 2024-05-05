@@ -20,6 +20,7 @@ export default function Hidden() {
   const [randomItems, setRandomItems] = useState([]);
   const [watchingItems, setWatchingItems] = useState([]);
   const [latestItems, setLatestItems] = useState([]);
+  const [playlistItems, setPlaylistItems] = useState([]);
 
   const getData = async () => {
     const token = storage.getItem("token");
@@ -31,6 +32,9 @@ export default function Hidden() {
 
     const latest = await api.getLatest(token, "movies", 1);
     setLatestItems(latest);
+
+    const playlists = await api.getPlaylists(token, 1);
+    setPlaylistItems(playlists);
   };
 
   useEffect(() => {
@@ -51,6 +55,11 @@ export default function Hidden() {
       {latestItems.length > 0 && (
         <Slider items={latestItems} title={"Recently Released"} spaceTop={32} />
       )}
+      {playlistItems.map((playlist) => {
+        return (
+          <Slider items={playlist.items} title={playlist.title} spaceTop={32} />
+        );
+      })}
     </Holder>
   );
 }

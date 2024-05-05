@@ -359,6 +359,18 @@ export default function Api() {
     });
   };
 
+  const getPlaylists = async function (token, hidden) {
+    return fetch(API_URL + `/playlist?hidden=${hidden}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    }).then((data) => {
+      return data.json();
+    });
+  };
+
   return {
     login,
     getProfile,
@@ -387,5 +399,6 @@ export default function Api() {
     getWatchParty,
     getWatchPartyFiltered,
     sendWatchPartyMessage,
+    getPlaylists,
   };
 }

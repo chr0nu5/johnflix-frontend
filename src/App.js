@@ -8,11 +8,13 @@ import Blank from "./pages/blank.js";
 
 import Login from "./pages/login.js";
 import Hidden from "./pages/hidden.js";
+import Movies from "./pages/movies.js";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/movies" element={<Movies />} />
 
       <Route path="/hidden" element={<Hidden />} />
 
