@@ -11,6 +11,7 @@ import Helper from "../libs/helper";
 import Page from "./page";
 import Api from "../libs/api";
 import Storage from "../libs/storage";
+import Paginator from "./paginator";
 
 const Holder = styled.div`
   @media (max-width: 1024px) {
@@ -101,7 +102,16 @@ const ContentTags = styled.div`
   margin-bottom: 24px;
 `;
 
-export default function Display({ items, hidden }) {
+export default function Display({
+  items,
+  hidden,
+  title,
+  isList,
+  totalPages,
+  totalItems,
+  callback,
+  gallery,
+}) {
   const api = Api();
   const storage = Storage();
 
@@ -149,7 +159,7 @@ export default function Display({ items, hidden }) {
     <Holder>
       <Featured
         style={{
-          height: height,
+          height: isList ? "auto" : height,
           backgroundImage: `url(${items[0].image})`,
         }}
       >
@@ -160,7 +170,7 @@ export default function Display({ items, hidden }) {
               opacity: preview ? 1 : 0,
             }}
           >
-            <video autoPlay playsInline muted>
+            <video autoPlay playsInline muted loop>
               <source
                 src={`${preview.media}#t=${preview.duration / 3}`}
                 type="video/mp4"
@@ -169,9 +179,14 @@ export default function Display({ items, hidden }) {
           </FeaturedVideo>
         )}
         <Menu hidden={hidden} />
-        <Content>
+        <Content
+          style={{
+            position: isList ? "relative" : "absolute",
+            paddingTop: isList ? height / 2 : 0,
+          }}
+        >
           <Page>
-            <ContentTitle>{items[0].title}</ContentTitle>
+            <ContentTitle>{title ? title : items[0].title}</ContentTitle>
             {preview && (
               <ContentDescription>{preview.description}</ContentDescription>
             )}
@@ -187,19 +202,37 @@ export default function Display({ items, hidden }) {
                 </Tag>
               )}
             </ContentTags>
-            <Button
-              style={{ marginBottom: 32 }}
-              type="primary"
-              size={"large"}
-              icon={<CaretRightOutlined />}
-              onClick={() => {
-                window.location = `/${items[0].path}/${items[0].hash}`;
-              }}
-            >
-              PLAY
-            </Button>
+            {!title ? (
+              <Button
+                style={{ marginBottom: 32 }}
+                type="primary"
+                size={"large"}
+                icon={<CaretRightOutlined />}
+                onClick={() => {
+                  window.location = `/${items[0].path}/${items[0].hash}`;
+                }}
+              >
+                PLAY
+              </Button>
+            ) : (
+              <></>
+            )}
           </Page>
-          <Slider title={"Recommended for you"} items={items} />
+          {title ? (
+            <Paginator
+              title={title ? "All" : "Recommended for you"}
+              items={items}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              callback={callback}
+              gallery={gallery}
+            />
+          ) : (
+            <Slider
+              title={title ? "All" : "Recommended for you"}
+              items={items}
+            />
+          )}
         </Content>
       </Featured>
     </Holder>

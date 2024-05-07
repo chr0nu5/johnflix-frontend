@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { CaretRightOutlined } from "@ant-design/icons";
+import { Pagination } from "antd";
 
 import Page from "./page";
 import Watchlist from "./watchlist";
@@ -13,20 +14,21 @@ const Holder = styled.div`
   );
   width: 100%;
   overflow-x: scroll;
-  height: 300px;
+  /* height: 300px; */
 
   &.list {
     overflow: auto;
-    height: auto;
+    /* height: auto; */
   }
 `;
 
 const ContentHolder = styled.div`
   width: 100%;
-  height: 300px;
+  padding-bottom: 56px;
+  /* height: 300px; */
 
   &.list {
-    height: auto;
+    /* height: auto; */
   }
 `;
 
@@ -42,11 +44,11 @@ const Title = styled.div`
 `;
 
 const ElementHolder = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
+  /* display: flex; */
+  /* flex-wrap: nowrap; */
   overflow-x: auto;
   width: 100%;
-  height: 230px;
+  /* height: 230px; */
 
   &.list {
     display: block;
@@ -208,29 +210,60 @@ const Heart = styled.div`
   }
 `;
 
-export default function Slider({ isList, title, items, spaceTop }) {
+const Paging = styled.div`
+  padding-top: 40px;
+`;
+
+export default function Paginator({
+  title,
+  items,
+  spaceTop,
+  totalPages,
+  totalItems,
+  callback,
+  gallery,
+}) {
   return (
     items && (
-      <Holder style={{ marginTop: spaceTop }} className={isList ? "list" : ""}>
-        <ContentHolder className={isList ? "list" : ""}>
+      <Holder style={{ marginTop: spaceTop }} className={"list"}>
+        <ContentHolder className={"list"}>
           <Page>
             <Title>{title}</Title>
-            <ElementHolder className={isList ? "list" : ""}>
+            <ElementHolder className={"list"}>
               {items.map((item) => {
                 return (
-                  <Element className={isList ? "list" : ""}>
+                  <Element
+                    className={"list"}
+                    style={{ height: gallery ? 460 : 230 }}
+                  >
                     <ElementContent
-                      style={{ backgroundImage: `url(${item.image})` }}
+                      style={{
+                        backgroundImage: `url(${item.image})`,
+                      }}
                     >
-                      <Heart style={{ top: item.time ? 24 : 8 }}>
-                        <Watchlist initial={item.watchlist} hash={item.hash} />
-                      </Heart>
-                      <ElementContentOverlay>
-                        <Play href={`/${item.path}/${item.hash}`}>
-                          <CaretRightOutlined />
-                        </Play>
+                      {(item.path === "movie" || item.path === "episode") && (
+                        <Heart style={{ top: item.time ? 24 : 8 }}>
+                          <Watchlist
+                            initial={item.watchlist}
+                            hash={item.hash}
+                          />
+                        </Heart>
+                      )}
+                      <ElementContentOverlay
+                        style={{ cursor: gallery ? "pointer" : "auto" }}
+                        onClick={() => {
+                          if (gallery) {
+                            window.location = `/${item.path}/${item.hash}`;
+                          }
+                        }}
+                      >
+                        {!gallery && (
+                          <Play href={`/${item.path}/${item.hash}`}>
+                            <CaretRightOutlined />
+                          </Play>
+                        )}
                         <ItemTitle>
-                          {item.title}
+                          {item.title} {item.number ? `(${item.number})` : ""}
                           <span>{item.subtitle}</span>
                         </ItemTitle>
                       </ElementContentOverlay>
@@ -248,6 +281,18 @@ export default function Slider({ isList, title, items, spaceTop }) {
                 );
               })}
             </ElementHolder>
+            {totalPages && (
+              <Paging>
+                <Pagination
+                  total={totalItems}
+                  pageSize={40}
+                  totalPages={totalPages}
+                  hideOnSinglePage
+                  onChange={callback}
+                  showSizeChanger={false}
+                />
+              </Paging>
+            )}
           </Page>
         </ContentHolder>
       </Holder>

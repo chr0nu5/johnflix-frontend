@@ -35,25 +35,39 @@ export default function Home() {
     setLatestItems(latest);
   };
 
+  const isLoggedIn = async () => {
+    const token = storage.getItem("token");
+    console.log(token);
+    if (token) {
+      const user = await api.getProfile(token);
+      if (!user.username) {
+        window.location = "/login";
+      }
+    }
+  };
+
   useEffect(() => {
+    isLoggedIn();
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Holder>
-      {randomItems.length > 0 && <Display items={randomItems} hidden={0} />}
-      {latestItems.length > 0 && (
+      {randomItems && randomItems.length > 0 && (
+        <Display items={randomItems} hidden={0} />
+      )}
+      {latestItems && latestItems.length > 0 && (
         <Slider items={latestItems} title={"Recently Released"} spaceTop={32} />
       )}
-      {watchingMovies.length > 0 && (
+      {watchingMovies && watchingMovies.length > 0 && (
         <Slider
           items={watchingMovies}
           title={"Continue Watching (Movies)"}
           spaceTop={32}
         />
       )}
-      {watchingEpisodes.length > 0 && (
+      {watchingEpisodes && watchingEpisodes.length > 0 && (
         <Slider
           items={watchingEpisodes}
           title={"Continue Watching (Episodes)"}

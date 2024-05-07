@@ -137,8 +137,10 @@ const MenuSpacer = styled.div`
   width: 100%;
 `;
 
-const Logout = styled.a`
+const MenuItemProfile = styled.a`
   font-weight: 700;
+  display: block;
+  margin-top: 16px;
 `;
 
 export default function Menu({ hidden }) {
@@ -267,7 +269,12 @@ export default function Menu({ hidden }) {
           </Notification>
           <Profile>
             <Popover
-              content={<Logout onClick={logout}>Logout</Logout>}
+              content={
+                <>
+                  <MenuItemProfile href="/watchlist">WatchList</MenuItemProfile>
+                  <MenuItemProfile onClick={logout}>Logout</MenuItemProfile>
+                </>
+              }
               title="Profile"
               trigger="hover"
             >
