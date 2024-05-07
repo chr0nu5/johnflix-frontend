@@ -22,6 +22,7 @@ import Season from "./pages/season.js";
 import Photos from "./pages/photos.js";
 import Photo from "./pages/photo.js";
 import Search from "./pages/search.js";
+import Player from "./pages/player.js";
 
 function App() {
   return (
@@ -49,6 +50,10 @@ function App() {
       <Route path="/search" element={<Search />} />
 
       <Route path="/login" element={<Login />} />
+
+      <Route path="/:player/:hash" element={<Player />} />
+      <Route path="/:player/:hash" element={<Tag />} />
+
       <Route path="*" element={<Blank />} />
     </Routes>
   );
