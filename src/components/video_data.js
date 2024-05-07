@@ -20,6 +20,7 @@ const Title = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  padding: 16px 0px 8px;
 `;
 
 const Data = styled.div`
