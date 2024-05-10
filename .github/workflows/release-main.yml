@@ -25,25 +25,25 @@ jobs:
           npm install
           npm run build
 
-      # - name: Release
-      #   uses: shallwefootball/s3-upload-action@master
-      #   with:
-      #     aws_key_id: ${{ secrets.AWS_KEY }}
-      #     aws_secret_access_key: ${{ secrets.AWS_SEC}}
-      #     aws_bucket: ${{ secrets.S3 }}
-      #     source_dir: "build"
-      #     destination_dir: ""
+      - name: Release
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.AWS_KEY }}
+          aws_secret_access_key: ${{ secrets.AWS_SEC}}
+          aws_bucket: ${{ secrets.S3 }}
+          source_dir: "build"
+          destination_dir: ""
 
-      # - uses: actions/setup-python@v2
-      #   with:
-      #     python-version: "3.9"
-      #     cache: "pip"
-      # - run: pip install -r requirements.txt
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+          cache: "pip"
+      - run: pip install -r requirements.txt
 
-      # - name: Clear Cache
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SEC }}
-      #     DISTRIBUITION: ${{ secrets.CLOUDFRONT }}
-      #   run: |
-      #     python clear_cache.py
+      - name: Clear Cache
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SEC }}
+          DISTRIBUITION: ${{ secrets.CLOUDFRONT }}
+        run: |
+          python clear_cache.py
