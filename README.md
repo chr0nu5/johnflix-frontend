@@ -6,6 +6,69 @@
 
 This is an opensource project, to study and try to organize media in a cool way. I`ve been using this for a while now, and decided to make it opensource so other people could use it to organize your personal stash of home-made movies and/or media. You can find the [backend here](https://github.com/chr0nu5/johnflix-api).
 
+# How to use it
+
+You need an instance of the API running, but this is just a sample frontend, made with (very) simple react to demonstrate how to consume the API and use it`s power. It will have a basic login system, and a check to see if the user os logged in, to show the pages. All the pages works well on desktop and mobile.
+
+# Build
+
+You should set a `env` var named `REACT_APP_API_URL` with the API endpoint base url.
+
+# Deploy
+
+In this repo, there is a sample pipeline file for github actions, to build and release this project using AWS S3 and AWS Cloudfront :)
+
+```
+npm install
+npm start
+```
+
+# Screenshots
+
+Here is a few samples of the routes and screens for this frontend. All the content displayed here are for demonstration porpuses.
+
+## Home
+
+<p align="center">
+  <img width="100%" src="_repo/screens/1.png">
+</p>
+
+## Genres
+
+<p align="center">
+  <img width="100%" src="_repo/screens/2.png">
+</p>
+
+## Tags
+
+<p align="center">
+  <img width="100%" src="_repo/screens/3.png">
+</p>
+
+## Season
+
+<p align="center">
+  <img width="100%" src="_repo/screens/4.png">
+</p>
+
+## Updates
+
+<p align="center">
+  <img width="100%" src="_repo/screens/5.png">
+</p>
+
+## Watchlist
+
+<p align="center">
+  <img width="100%" src="_repo/screens/6.png">
+</p>
+
+## Player
+
+<p align="center">
+  <img width="100%" src="_repo/screens/7.png">
+</p>
+
 # Licence
 
 ```
