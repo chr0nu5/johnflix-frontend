@@ -6,6 +6,7 @@ import Api from "../libs/api";
 import Storage from "../libs/storage";
 
 import Display from "../components/display";
+import Wrapper from "../components/wrapper";
 
 const Holder = styled.div`
   width: 100%;
@@ -32,15 +33,17 @@ export default function Season() {
   }, [hash]);
 
   return (
-    <Holder>
-      {items.episodes.length > 0 && (
-        <Display
-          items={items.episodes}
-          hidden={0}
-          title={`${items.title}: ${items.subtitle}`}
-          isList={true}
-        />
-      )}
-    </Holder>
+    <Wrapper>
+      <Holder>
+        {items.episodes.length > 0 && (
+          <Display
+            items={items.episodes}
+            hidden={0}
+            title={`${items.title}: ${items.subtitle}`}
+            isList={true}
+          />
+        )}
+      </Holder>
+    </Wrapper>
   );
 }

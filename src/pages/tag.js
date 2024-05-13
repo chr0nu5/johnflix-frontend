@@ -6,6 +6,7 @@ import Api from "../libs/api";
 import Storage from "../libs/storage";
 
 import Display from "../components/display";
+import Wrapper from "../components/wrapper";
 
 const Holder = styled.div`
   width: 100%;
@@ -38,18 +39,20 @@ export default function Tag() {
   }, [hash, page]);
 
   return (
-    <Holder>
-      {items.items.length > 0 && (
-        <Display
-          items={items.items}
-          hidden={0}
-          title={items.title}
-          isList={true}
-          totalPages={items.total_pages}
-          totalItems={items.total_pages * 40}
-          callback={changePage}
-        />
-      )}
-    </Holder>
+    <Wrapper>
+      <Holder>
+        {items.items.length > 0 && (
+          <Display
+            items={items.items}
+            hidden={0}
+            title={items.title}
+            isList={true}
+            totalPages={items.total_pages}
+            totalItems={items.total_pages * 40}
+            callback={changePage}
+          />
+        )}
+      </Holder>
+    </Wrapper>
   );
 }

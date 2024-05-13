@@ -5,6 +5,7 @@ import Api from "../libs/api";
 import Storage from "../libs/storage";
 
 import Display from "../components/display";
+import Wrapper from "../components/wrapper";
 
 const Holder = styled.div`
   width: 100%;
@@ -30,15 +31,17 @@ export default function Watchlist() {
   }, []);
 
   return (
-    <Holder>
-      {items.items.length > 0 && (
-        <Display
-          items={items.items}
-          hidden={0}
-          title={"Watchlist"}
-          isList={true}
-        />
-      )}
-    </Holder>
+    <Wrapper>
+      <Holder>
+        {items.items.length > 0 && (
+          <Display
+            items={items.items}
+            hidden={0}
+            title={"Watchlist"}
+            isList={true}
+          />
+        )}
+      </Holder>
+    </Wrapper>
   );
 }

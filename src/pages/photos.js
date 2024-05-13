@@ -5,6 +5,7 @@ import Api from "../libs/api";
 import Storage from "../libs/storage";
 
 import Display from "../components/display";
+import Wrapper from "../components/wrapper";
 
 const Holder = styled.div`
   width: 100%;
@@ -30,10 +31,12 @@ export default function Photos() {
   }, []);
 
   return (
-    <Holder>
-      {items.length > 0 && (
-        <Display items={items} hidden={0} title={"Gallery"} isList={true} />
-      )}
-    </Holder>
+    <Wrapper>
+      <Holder>
+        {items.length > 0 && (
+          <Display items={items} hidden={0} title={"Gallery"} isList={true} />
+        )}
+      </Holder>
+    </Wrapper>
   );
 }

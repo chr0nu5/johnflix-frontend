@@ -8,6 +8,7 @@ import Storage from "../libs/storage";
 import Paginator from "../components/paginator";
 import Menu from "../components/menu";
 import Page from "../components/page";
+import Wrapper from "../components/wrapper";
 
 const Holder = styled.div`
   width: 100%;
@@ -137,80 +138,82 @@ export default function Search() {
   };
 
   return (
-    <Holder>
-      <Menu hidden={0} />
-      <Page>
-        <Toolbar>
-          <SearchIcon>
-            <SearchOutlined style={{ fontSize: 40 }} />
-          </SearchIcon>
-          <SearchField>
-            <SearchInput
-              onChange={handleChangeSearch}
-              placeholder={"Keywords"}
-            />
-          </SearchField>
-          <SearchFilter>
-            <Select
-              size={"large"}
-              mode="multiple"
-              allowClear
-              style={{
-                width: "100%",
-              }}
-              placeholder="Genres"
-              defaultValue={g}
-              onChange={handleChangeGenre}
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.label ?? "").toLowerCase().includes(input)
-              }
-              filterSort={(optionA, optionB) =>
-                (optionA?.label ?? "")
-                  .toLowerCase()
-                  .localeCompare((optionB?.label ?? "").toLowerCase())
-              }
-              tokenSeparators={[","]}
-              options={genres}
-            />
-          </SearchFilter>
-          <SearchFilter>
-            <Select
-              size={"large"}
-              allowClear
-              style={{
-                width: "100%",
-              }}
-              mode="multiple"
-              placeholder="Tags"
-              defaultValue={t}
-              onChange={handleChangeTag}
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                (option?.label ?? "").toLowerCase().includes(input)
-              }
-              filterSort={(optionA, optionB) =>
-                (optionA?.label ?? "")
-                  .toLowerCase()
-                  .localeCompare((optionB?.label ?? "").toLowerCase())
-              }
-              tokenSeparators={[","]}
-              options={tags}
-            />
-          </SearchFilter>
-        </Toolbar>
-      </Page>
-      {data && data.length > 0 && (
-        <Paginator
-          title={""}
-          items={data}
-          totalPages={1}
-          totalItems={40}
-          callback={() => {}}
-        />
-      )}
-    </Holder>
+    <Wrapper>
+      <Holder>
+        <Menu hidden={0} />
+        <Page>
+          <Toolbar>
+            <SearchIcon>
+              <SearchOutlined style={{ fontSize: 40 }} />
+            </SearchIcon>
+            <SearchField>
+              <SearchInput
+                onChange={handleChangeSearch}
+                placeholder={"Keywords"}
+              />
+            </SearchField>
+            <SearchFilter>
+              <Select
+                size={"large"}
+                mode="multiple"
+                allowClear
+                style={{
+                  width: "100%",
+                }}
+                placeholder="Genres"
+                defaultValue={g}
+                onChange={handleChangeGenre}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").toLowerCase().includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                tokenSeparators={[","]}
+                options={genres}
+              />
+            </SearchFilter>
+            <SearchFilter>
+              <Select
+                size={"large"}
+                allowClear
+                style={{
+                  width: "100%",
+                }}
+                mode="multiple"
+                placeholder="Tags"
+                defaultValue={t}
+                onChange={handleChangeTag}
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").toLowerCase().includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                tokenSeparators={[","]}
+                options={tags}
+              />
+            </SearchFilter>
+          </Toolbar>
+        </Page>
+        {data && data.length > 0 && (
+          <Paginator
+            title={""}
+            items={data}
+            totalPages={1}
+            totalItems={40}
+            callback={() => {}}
+          />
+        )}
+      </Holder>
+    </Wrapper>
   );
 }

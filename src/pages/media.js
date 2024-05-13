@@ -6,6 +6,7 @@ import Api from "../libs/api";
 import Storage from "../libs/storage";
 
 import Display from "../components/display";
+import Wrapper from "../components/wrapper";
 
 const Holder = styled.div`
   width: 100%;
@@ -32,15 +33,12 @@ export default function Media() {
   }, [hash]);
 
   return (
-    <Holder>
-      {items.seasons.length > 0 && (
-        <Display
-          items={items.seasons}
-          hidden={0}
-          title={"Seasons"}
-          //   isList={true}
-        />
-      )}
-    </Holder>
+    <Wrapper>
+      <Holder>
+        {items.seasons.length > 0 && (
+          <Display items={items.seasons} hidden={0} title={"Seasons"} />
+        )}
+      </Holder>
+    </Wrapper>
   );
 }

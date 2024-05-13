@@ -6,6 +6,7 @@ import Storage from "../libs/storage";
 
 import Display from "../components/display";
 import Slider from "../components/slider";
+import Wrapper from "../components/wrapper";
 
 const Holder = styled.div`
   width: 100%;
@@ -43,23 +44,33 @@ export default function Hidden() {
   }, []);
 
   return (
-    <Holder>
-      {randomItems.length > 0 && <Display items={randomItems} hidden={1} />}
-      {watchingItems.length > 0 && (
-        <Slider
-          items={watchingItems}
-          title={"Continue Watching"}
-          spaceTop={32}
-        />
-      )}
-      {latestItems.length > 0 && (
-        <Slider items={latestItems} title={"Recently Released"} spaceTop={32} />
-      )}
-      {playlistItems.map((playlist) => {
-        return (
-          <Slider items={playlist.items} title={playlist.title} spaceTop={32} />
-        );
-      })}
-    </Holder>
+    <Wrapper>
+      <Holder>
+        {randomItems.length > 0 && <Display items={randomItems} hidden={1} />}
+        {watchingItems.length > 0 && (
+          <Slider
+            items={watchingItems}
+            title={"Continue Watching"}
+            spaceTop={32}
+          />
+        )}
+        {latestItems.length > 0 && (
+          <Slider
+            items={latestItems}
+            title={"Recently Released"}
+            spaceTop={32}
+          />
+        )}
+        {playlistItems.map((playlist) => {
+          return (
+            <Slider
+              items={playlist.items}
+              title={playlist.title}
+              spaceTop={32}
+            />
+          );
+        })}
+      </Holder>
+    </Wrapper>
   );
 }

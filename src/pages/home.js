@@ -6,6 +6,7 @@ import Storage from "../libs/storage";
 
 import Display from "../components/display";
 import Slider from "../components/slider";
+import Wrapper from "../components/wrapper";
 
 const Holder = styled.div`
   width: 100%;
@@ -53,27 +54,33 @@ export default function Home() {
   }, []);
 
   return (
-    <Holder>
-      {randomItems && randomItems.length > 0 && (
-        <Display items={randomItems} hidden={0} />
-      )}
-      {latestItems && latestItems.length > 0 && (
-        <Slider items={latestItems} title={"Recently Released"} spaceTop={32} />
-      )}
-      {watchingMovies && watchingMovies.length > 0 && (
-        <Slider
-          items={watchingMovies}
-          title={"Continue Watching (Movies)"}
-          spaceTop={32}
-        />
-      )}
-      {watchingEpisodes && watchingEpisodes.length > 0 && (
-        <Slider
-          items={watchingEpisodes}
-          title={"Continue Watching (Episodes)"}
-          spaceTop={32}
-        />
-      )}
-    </Holder>
+    <Wrapper>
+      <Holder>
+        {randomItems && randomItems.length > 0 && (
+          <Display items={randomItems} hidden={0} />
+        )}
+        {latestItems && latestItems.length > 0 && (
+          <Slider
+            items={latestItems}
+            title={"Recently Released"}
+            spaceTop={32}
+          />
+        )}
+        {watchingMovies && watchingMovies.length > 0 && (
+          <Slider
+            items={watchingMovies}
+            title={"Continue Watching (Movies)"}
+            spaceTop={32}
+          />
+        )}
+        {watchingEpisodes && watchingEpisodes.length > 0 && (
+          <Slider
+            items={watchingEpisodes}
+            title={"Continue Watching (Episodes)"}
+            spaceTop={32}
+          />
+        )}
+      </Holder>
+    </Wrapper>
   );
 }

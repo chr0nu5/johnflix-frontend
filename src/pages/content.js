@@ -7,6 +7,8 @@ import Storage from "../libs/storage";
 
 import Display from "../components/display";
 
+import Wrapper from "../components/wrapper";
+
 const Holder = styled.div`
   width: 100%;
   @media (max-width: 1024px) {
@@ -32,16 +34,18 @@ export default function Content() {
   }, [hash]);
 
   return (
-    <Holder>
-      {items.medias.length > 0 && (
-        <Display
-          items={items.medias}
-          hidden={0}
-          title={items.title}
-          isList={true}
-          gallery={false}
-        />
-      )}
-    </Holder>
+    <Wrapper>
+      <Holder>
+        {items.medias.length > 0 && (
+          <Display
+            items={items.medias}
+            hidden={0}
+            title={items.title}
+            isList={true}
+            gallery={false}
+          />
+        )}
+      </Holder>
+    </Wrapper>
   );
 }
