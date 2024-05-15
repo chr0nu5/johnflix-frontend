@@ -22,10 +22,14 @@ export default function Media() {
   const [items, setItems] = useState({ seasons: [] });
 
   const getData = async () => {
+    setLoading(true);
     const token = storage.getItem("token");
     const _items = await api.getMedia(token, hash);
     setItems(_items);
+    setLoading(false);
   };
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getData();
@@ -33,7 +37,7 @@ export default function Media() {
   }, [hash]);
 
   return (
-    <Wrapper>
+    <Wrapper loading={loading}>
       <Holder>
         {items.seasons.length > 0 && (
           <Display items={items.seasons} hidden={0} title={"Seasons"} />

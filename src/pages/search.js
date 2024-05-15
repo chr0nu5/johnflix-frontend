@@ -74,9 +74,11 @@ export default function Search() {
   const [g, setG] = useState([]);
 
   const search = async () => {
+    setLoading(true);
     const token = storage.getItem("token");
     const response = await api.searchExtra(token, s, g, t);
     setData(response.items);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -92,6 +94,7 @@ export default function Search() {
   const [tags, setTags] = useState([]);
 
   const getData = async () => {
+    setLoading(true);
     const token = storage.getItem("token");
     let response = await api.getGenres(token, 0);
     let _genres = [];
@@ -113,6 +116,7 @@ export default function Search() {
       });
     }
     setTags(_tags);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -137,8 +141,10 @@ export default function Search() {
     }, doneTypingInterval);
   };
 
+  const [loading, setLoading] = useState(false);
+
   return (
-    <Wrapper>
+    <Wrapper loading={loading}>
       <Holder>
         <Menu hidden={0} />
         <Page>

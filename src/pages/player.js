@@ -9,6 +9,8 @@ import Video from "../components/video";
 import VideoData from "../components/video_data";
 import Menu from "../components/menu";
 
+import Wrapper from "../components/wrapper";
+
 const Holder = styled.div`
   width: 100%;
   position: relative;
@@ -37,6 +39,7 @@ export default function Player() {
   }, []);
 
   const getData = async (type) => {
+    setLoading(true);
     const token = storage.getItem("token");
     let response = null;
     if (type === "movie") {
@@ -45,7 +48,10 @@ export default function Player() {
       response = await api.getEpisode(token, hash);
     }
     setMedia(response);
+    setLoading(false);
   };
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let type = "movie";
@@ -58,11 +64,13 @@ export default function Player() {
 
   return (
     media && (
-      <Holder>
-        <Menu hidden={0} />
-        <Video media={media} width={width} height={height - 150 - 72} />
-        <VideoData media={media} width={width} />
-      </Holder>
+      <Wrapper loading={loading}>
+        <Holder>
+          <Menu hidden={0} />
+          <Video media={media} width={width} height={height - 150 - 72} />
+          <VideoData media={media} width={width} />
+        </Holder>
+      </Wrapper>
     )
   );
 }

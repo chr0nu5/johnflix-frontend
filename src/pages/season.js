@@ -22,10 +22,14 @@ export default function Season() {
   const [items, setItems] = useState({ episodes: [] });
 
   const getData = async () => {
+    setLoading(true);
     const token = storage.getItem("token");
     const _items = await api.getSeason(token, hash);
     setItems(_items);
+    setLoading(false);
   };
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getData();
@@ -33,7 +37,7 @@ export default function Season() {
   }, [hash]);
 
   return (
-    <Wrapper>
+    <Wrapper loading={loading}>
       <Holder>
         {items.episodes.length > 0 && (
           <Display

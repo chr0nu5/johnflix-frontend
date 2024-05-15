@@ -23,6 +23,7 @@ export default function Movies() {
   const [playlistItems, setPlaylistItems] = useState([]);
 
   const getData = async () => {
+    setLoading(true);
     const token = storage.getItem("token");
     const random = await api.getRandom(token, "movies", 0);
     setRandomItems(random);
@@ -32,7 +33,10 @@ export default function Movies() {
 
     const playlists = await api.getPlaylists(token, 0);
     setPlaylistItems(playlists);
+    setLoading(false);
   };
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getData();
@@ -40,7 +44,7 @@ export default function Movies() {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper loading={loading}>
       <Holder>
         {randomItems.length > 0 && <Display items={randomItems} hidden={0} />}
         {watchingItems.length > 0 && (

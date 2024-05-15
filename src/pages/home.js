@@ -24,6 +24,8 @@ export default function Home() {
   const [latestItems, setLatestItems] = useState([]);
 
   const getData = async () => {
+    setLoading(true);
+
     const token = storage.getItem("token");
     const random = await api.getRandom(token, "movies", 0);
     setRandomItems(random);
@@ -34,6 +36,8 @@ export default function Home() {
 
     const latest = await api.getLatest(token, "movies", 0);
     setLatestItems(latest);
+
+    setLoading(false);
   };
 
   const isLoggedIn = async () => {
@@ -47,6 +51,8 @@ export default function Home() {
     }
   };
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     isLoggedIn();
     getData();
@@ -54,7 +60,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper loading={loading}>
       <Holder>
         {randomItems && randomItems.length > 0 && (
           <Display items={randomItems} hidden={0} />

@@ -20,10 +20,14 @@ export default function MoviesTags() {
   const [items, setItems] = useState([]);
 
   const getData = async () => {
+    setLoading(true);
     const token = storage.getItem("token");
     const _items = await api.getTags(token, 0);
     setItems(_items);
+    setLoading(false);
   };
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getData();
@@ -31,7 +35,7 @@ export default function MoviesTags() {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper loading={loading}>
       <Holder>
         {items.length > 0 && (
           <Display items={items} hidden={0} title={"Tags"} isList={true} />

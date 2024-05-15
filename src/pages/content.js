@@ -23,10 +23,16 @@ export default function Content() {
   const [items, setItems] = useState({ medias: [] });
 
   const getData = async () => {
+    setLoading(true);
+
     const token = storage.getItem("token");
     const _items = await api.getContent(token, hash);
     setItems(_items);
+
+    setLoading(false);
   };
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getData();
@@ -34,7 +40,7 @@ export default function Content() {
   }, [hash]);
 
   return (
-    <Wrapper>
+    <Wrapper loading={loading}>
       <Holder>
         {items.medias.length > 0 && (
           <Display

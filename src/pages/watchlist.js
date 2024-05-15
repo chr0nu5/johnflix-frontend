@@ -20,10 +20,14 @@ export default function Watchlist() {
   const [items, setItems] = useState({ items: [] });
 
   const getData = async () => {
+    setLoading(true);
     const token = storage.getItem("token");
     const _items = await api.getWatchlist(token, 0);
     setItems(_items);
+    setLoading(false);
   };
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getData();
@@ -31,7 +35,7 @@ export default function Watchlist() {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper loading={loading}>
       <Holder>
         {items.items.length > 0 && (
           <Display

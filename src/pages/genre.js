@@ -23,15 +23,19 @@ export default function Genre() {
   const [page, setPage] = useState(0);
 
   const getData = async () => {
+    setLoading(true);
     const token = storage.getItem("token");
     const _items = await api.getGenre(token, hash, page);
     setItems(_items);
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setLoading(false);
   };
 
   const changePage = (page, pageSize) => {
     setPage(page);
   };
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getData();
@@ -39,7 +43,7 @@ export default function Genre() {
   }, [hash, page]);
 
   return (
-    <Wrapper>
+    <Wrapper loading={loading}>
       <Holder>
         {items.items.length > 0 && (
           <Display
