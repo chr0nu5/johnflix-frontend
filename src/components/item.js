@@ -133,7 +133,7 @@ export default function Item({ item }) {
     <ElementContent
       style={{ backgroundImage: loaded ? `url(${item.image})` : "none" }}
     >
-      <SkeletonHolder style={{ opacitu: loaded ? 0 : 1 }}>
+      <SkeletonHolder style={{ opacity: loaded ? 0 : 1 }}>
         <Skeleton.Image active={!loaded} />
       </SkeletonHolder>
       <Heart style={{ top: item.time ? 24 : 8 }}>
