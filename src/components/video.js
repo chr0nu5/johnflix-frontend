@@ -229,7 +229,7 @@ export default function Video({ media, width, height, party }) {
           height: height,
         }}
       >
-        <video ref={videoRef} className="video-js vjs-big-play-centered" />
+        <video ref={videoRef} className="video-js" />
       </div>
     </Holder>
   );

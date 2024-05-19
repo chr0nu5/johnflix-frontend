@@ -371,6 +371,18 @@ export default function Api() {
     });
   };
 
+  const getSubtitle = async function (token, hash, language) {
+    return fetch(API_URL + `/subtitle/${hash}/${language}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    }).then((data) => {
+      return data.json();
+    });
+  };
+
   return {
     login,
     getProfile,
@@ -400,5 +412,6 @@ export default function Api() {
     getWatchPartyFiltered,
     sendWatchPartyMessage,
     getPlaylists,
+    getSubtitle,
   };
 }

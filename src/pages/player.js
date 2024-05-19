@@ -68,7 +68,7 @@ export default function Player() {
         <Holder>
           <Menu hidden={0} />
           <Video media={media} width={width} height={height - 150 - 72} />
-          <VideoData media={media} width={width} />
+          <VideoData setLoading={setLoading} media={media} width={width} />
         </Holder>
       </Wrapper>
     )

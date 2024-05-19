@@ -52,3 +52,9 @@ strong {
     display: none !important;
   }
 }
+
+.vjs-text-track-display div {
+  font-size: 1.1em;
+  line-height: 150%;
+  padding: 8px;
+}

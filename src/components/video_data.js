@@ -37,7 +37,7 @@ const Clear = styled.div`
   clear: both;
 `;
 
-export default function VideoData({ media, width, height }) {
+export default function VideoData({ media, width, height, setLoading }) {
   const helper = Helper();
   const navigate = useNavigate();
   const api = Api();
@@ -86,6 +86,14 @@ export default function VideoData({ media, width, height }) {
     }
   };
 
+  const getSubtitle = async () => {
+    setLoading(true);
+    const token = storage.getItem("token");
+    await api.getSubtitle(token, media.hash, "PT");
+    setLoading(false);
+    window.location.reload();
+  };
+
   useEffect(() => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,7 +104,21 @@ export default function VideoData({ media, width, height }) {
       <Page>
         <Title>
           {media.season ? `${media.season}: ` : ""}
-          {media.title}
+          {media.title}{" "}
+          {!media.subtitle ? (
+            <Tag
+              bordered
+              color="success"
+              style={{ fontSize: 16, cursor: "pointer" }}
+              onClick={() => {
+                getSubtitle();
+              }}
+            >
+              Download Subtitle (PT-BR)
+            </Tag>
+          ) : (
+            <></>
+          )}
         </Title>
         <Data className="spaced">
           {media.views > 0 && (
