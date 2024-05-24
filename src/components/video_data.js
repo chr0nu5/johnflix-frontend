@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-import { Tag } from "antd";
+import { Tag, Button } from "antd";
 import Helper from "../libs/helper";
 import Api from "../libs/api";
 import Storage from "../libs/storage";
@@ -105,21 +105,23 @@ export default function VideoData({ media, width, height, setLoading }) {
         <Title>
           {media.season ? `${media.season}: ` : ""}
           {media.title}{" "}
-          {!media.subtitle ? (
-            <Tag
-              bordered
-              color="success"
-              style={{ fontSize: 16, cursor: "pointer" }}
+        </Title>
+        {!media.subtitle ? (
+          <>
+            <Button
+              size="medium"
+              type="primary"
+              style={{ cursor: "pointer" }}
               onClick={() => {
                 getSubtitle();
               }}
             >
-              Download Subtitle (PT-BR)
-            </Tag>
-          ) : (
-            <></>
-          )}
-        </Title>
+              Get Subtitle (BR)
+            </Button>
+          </>
+        ) : (
+          <></>
+        )}
         <Data className="spaced">
           {media.views > 0 && (
             <Tag bordered color="warning" style={{ fontSize: 16 }}>
