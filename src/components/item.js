@@ -113,7 +113,7 @@ const Heart = styled.div`
   position: absolute;
   right: 12px;
   top: 8px;
-  z-index: 2;
+  z-index: 3;
 
   svg {
     filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 1));
