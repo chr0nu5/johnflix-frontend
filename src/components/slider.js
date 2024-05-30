@@ -116,13 +116,29 @@ const ProgressBar = styled.div`
   background-color: #e50914;
 `;
 
-export default function Slider({ isList, title, items, spaceTop }) {
+export default function Slider({
+  isList,
+  title,
+  items,
+  spaceTop,
+  link,
+  linkText,
+}) {
   return (
     items && (
       <Holder style={{ marginTop: spaceTop }} className={isList ? "list" : ""}>
         <ContentHolder className={isList ? "list" : ""}>
           <Page>
-            <Title>{title}</Title>
+            <Title>
+              {title}{" "}
+              {link ? (
+                <>
+                  <a href={link}>({linkText})</a>
+                </>
+              ) : (
+                <></>
+              )}
+            </Title>
             <ElementHolder className={isList ? "list" : ""}>
               {items.map((item) => {
                 return (

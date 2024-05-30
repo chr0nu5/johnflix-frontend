@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Tag, Button } from "antd";
 import { CaretRightOutlined } from "@ant-design/icons";
+import { Select } from "antd";
 
 import Slider from "./slider";
 import Menu from "./menu";
@@ -111,6 +112,9 @@ export default function Display({
   totalItems,
   callback,
   gallery,
+  callbackSort,
+  link,
+  linkText,
 }) {
   const api = Api();
   const storage = Storage();
@@ -201,6 +205,21 @@ export default function Display({
                   {helper.secondsToHm(items[0].duration)}
                 </Tag>
               )}
+              {callbackSort && (
+                <Select
+                  defaultValue="-id"
+                  style={{ width: 240, float: "right" }}
+                  onChange={callbackSort}
+                  options={[
+                    { value: "-id", label: "Newer First" },
+                    { value: "id", label: "Older First" },
+                    { value: "-date", label: "Year (Newer first)" },
+                    { value: "date", label: "Year (Older first)" },
+                    { value: "-title", label: "Title (DESC)" },
+                    { value: "title", label: "Title (ASC)" },
+                  ]}
+                />
+              )}
             </ContentTags>
             {!title ? (
               <Button
@@ -231,6 +250,8 @@ export default function Display({
             <Slider
               title={title ? "All" : "Recommended for you"}
               items={items}
+              link={link}
+              linkText={linkText}
             />
           )}
         </Content>

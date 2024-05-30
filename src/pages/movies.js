@@ -46,7 +46,14 @@ export default function Movies() {
   return (
     <Wrapper loading={loading}>
       <Holder>
-        {randomItems.length > 0 && <Display items={randomItems} hidden={0} />}
+        {randomItems.length > 0 && (
+          <Display
+            items={randomItems}
+            hidden={0}
+            link={"/movies/all"}
+            linkText={"View All"}
+          />
+        )}
         {watchingItems.length > 0 && (
           <Slider
             items={watchingItems}

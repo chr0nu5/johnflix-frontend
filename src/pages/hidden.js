@@ -51,7 +51,14 @@ export default function Hidden() {
   return (
     <Wrapper loading={loading}>
       <Holder>
-        {randomItems.length > 0 && <Display items={randomItems} hidden={1} />}
+        {randomItems.length > 0 && (
+          <Display
+            items={randomItems}
+            hidden={1}
+            link={"/hidden/all"}
+            linkText={"View All"}
+          />
+        )}
         {watchingItems.length > 0 && (
           <Slider
             items={watchingItems}

@@ -23,6 +23,7 @@ import Photos from "./pages/photos.js";
 import Photo from "./pages/photo.js";
 import Search from "./pages/search.js";
 import Player from "./pages/player.js";
+import All from "./pages/all.js";
 
 function App() {
   return (
@@ -53,6 +54,8 @@ function App() {
 
       <Route path="/:player/:hash" element={<Player />} />
       <Route path="/:player/:hash" element={<Tag />} />
+
+      <Route path="/:path/all" element={<All />} />
 
       <Route path="*" element={<Blank />} />
     </Routes>
