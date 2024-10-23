@@ -32,8 +32,6 @@ start_container() {
   docker run -d \
     --name "$container_name" \
     --restart always \
-    --env-file .env \
-    -v $(pwd)/src:/app/src \
     -p 8080:8080 \
     front-flix:latest
 }
