@@ -1,8 +1,8 @@
 #!/bin/bash
 
 rm -rf node_modules
-yarn
-yarn build
+npm install
+npm run build
 
 # Function to check if a container is running
 is_container_running() {
