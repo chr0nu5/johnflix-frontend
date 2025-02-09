@@ -96,7 +96,7 @@ export default function Login() {
         showNotification("error", "Ops!", "Invalid username or password");
       } else {
         showNotification("success", ":)", "Welcome!");
-          navigate("/");
+        navigate("/");
       }
     }
   };
@@ -142,7 +142,7 @@ export default function Login() {
               type="primary"
               loading={loading}
               block
-              onClick={!loading ? login : () => {}}
+              onClick={!loading ? login : () => { }}
             >
               {loading ? "Wait" : "Sign In"}
             </Button>
