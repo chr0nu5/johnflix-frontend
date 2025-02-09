@@ -2,15 +2,24 @@ const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export default function Api() {
   let token = localStorage.getItem("token");
+  let refreshToken = localStorage.getItem("refresh");
 
-  const saveToken = (newToken) => {
-    token = newToken;
-    localStorage.setItem("token", newToken);
+  const saveTokens = (newToken, newRefreshToken) => {
+    if (newToken) {
+      token = newToken;
+      localStorage.setItem("token", newToken);
+    }
+    if (newRefreshToken) {
+      refreshToken = newRefreshToken;
+      localStorage.setItem("refresh", newRefreshToken);
+    }
   };
 
-  const removeToken = () => {
+  const removeTokens = () => {
     token = null;
+    refreshToken = null;
     localStorage.removeItem("token");
+    localStorage.removeItem("refresh");
   };
 
   const getHeaders = () => {
@@ -21,14 +30,43 @@ export default function Api() {
     return headers;
   };
 
-  const handleResponse = async (response) => {
-    if (!response.ok) {
-      if (response.status === 401) {
-        removeToken();
+  const handleResponse = async (response, originalRequest) => {
+    if (response.status === 401 && refreshToken) {
+      const refreshed = await refreshAccessToken();
+      if (refreshed) {
+        return fetch(originalRequest.url, {
+          ...originalRequest,
+          headers: getHeaders(),
+        }).then(handleResponse);
+      } else {
+        removeTokens();
       }
+    }
+    if (!response.ok) {
       return {};
     }
     return response.json();
+  };
+
+  const refreshAccessToken = async () => {
+    const response = await fetch(`${API_URL}/auth/refresh/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
+
+    if (!response.ok) {
+      removeTokens();
+      return false;
+    }
+
+    const data = await response.json();
+    if (data.access) {
+      saveTokens(data.access);
+      return true;
+    }
+
+    return false;
   };
 
   const login = async (username, password) => {
@@ -37,10 +75,10 @@ export default function Api() {
       headers: getHeaders(),
       body: JSON.stringify({ username, password }),
     })
-      .then(handleResponse)
+      .then((response) => handleResponse(response, { url: `${API_URL}/auth/login/` }))
       .then((data) => {
-        if (data.access) {
-          saveToken(data.access);
+        if (data.access && data.refresh) {
+          saveTokens(data.access, data.refresh);
         }
         return data;
       });
@@ -50,11 +88,13 @@ export default function Api() {
     return fetch(`${API_URL}/user/profile/`, {
       method: "GET",
       headers: getHeaders(),
-    }).then(handleResponse);
+    }).then((response) =>
+      handleResponse(response, { url: `${API_URL}/user/profile/`, method: "GET" })
+    );
   };
 
   const logout = () => {
-    removeToken();
+    removeTokens();
   };
 
   return {

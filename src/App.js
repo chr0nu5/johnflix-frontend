@@ -6,11 +6,15 @@ import "./styles/main.css";
 import Blank from "./pages/blank.js";
 import Login from "./pages/login.js";
 
+import Home from "./pages/home.js";
+
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
 
+      <Route path="/" element={<Home />} />
+
+      <Route path="/login" element={<Login />} />
       <Route path="*" element={<Blank />} />
     </Routes>
   );
