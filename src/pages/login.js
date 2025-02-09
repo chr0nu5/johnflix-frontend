@@ -5,7 +5,6 @@ import { Input, Button, notification } from "antd";
 import { useNavigate } from "react-router-dom";
 
 import Api from "../libs/api";
-import Storage from "../libs/storage";
 
 const Holder = styled.div`
   position: absolute;
@@ -40,20 +39,17 @@ const LoginHolder = styled.div`
 `;
 
 const LoginLogo = styled.div`
-  position: absolute;
-  left: 24px;
-  top: 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 24px 24px 24px;
 
-  @media (max-width: 1024px) {
-    text-align: center;
-    width: 100%;
-    left: 0px;
+  img {
+  height: 40px;
+  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%);
   }
-`;
-
-const LoginTitle = styled.div`
-  font-size: 32px;
-  margin-bottom: 24px;
 `;
 
 const Field = styled.div`
@@ -68,7 +64,6 @@ const Field = styled.div`
 export default function Login() {
   const navigate = useNavigate();
   const api = Api();
-  const storage = Storage();
 
   const [loading, setLoading] = useState(false);
 
@@ -92,40 +87,22 @@ export default function Login() {
       );
     } else {
       setLoading(true);
-      const token = await api.login(username, password);
+      const response = await api.login(username, password);
       setLoading(false);
       setUserName(null);
       setPassword(null);
 
-      storage.removeItem("token");
-
-      if (token.error) {
+      if (!response.access) {
         showNotification("error", "Ops!", "Invalid username or password");
       } else {
-        if (token.token) {
-          showNotification("success", ":)", "Welcome!");
-          storage.saveItem("token", token.token);
+        showNotification("success", ":)", "Welcome!");
           navigate("/");
-        } else {
-          showNotification("error", "Ops!", "Invalid username or password");
-        }
-      }
-    }
-  };
-
-  const isLoggedIn = async () => {
-    const token = storage.getItem("token");
-    console.log(token);
-    if (token) {
-      const user = await api.getProfile(token);
-      if (user.username) {
-        navigate("/");
       }
     }
   };
 
   useEffect(() => {
-    isLoggedIn();
+    // isLoggedIn();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -133,11 +110,10 @@ export default function Login() {
     <Holder>
       {contextHolder}
       <Overlay>
-        <LoginLogo>
-          <img src="/img/logo.png" height="50" alt="Logo" />
-        </LoginLogo>
         <LoginHolder>
-          <LoginTitle>Sign In</LoginTitle>
+          <LoginLogo>
+            <img src="/img/logo.png" height="50" alt="Logo" />
+          </LoginLogo>
           <Field>
             <Input
               value={username}
