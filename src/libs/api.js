@@ -111,15 +111,26 @@ export default function Api() {
         );
     };
 
+    const getMovie = async (hash) => {
+        return fetch(`${API_URL}/movies/?hash=${hash}`, {
+            method: "GET",
+            headers: getHeaders(),
+        }).then((response) =>
+            handleResponse(response, { url: `${API_URL}/movies/?hash=${hash}`, method: "GET" })
+        );
+    };
+
     const logout = () => {
         removeTokens();
     };
 
     return {
-        login,
         getProfile,
         getMovies,
         getRecommended,
+        getMovie,
+
+        login,
         logout,
     };
 }

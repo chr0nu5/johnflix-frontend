@@ -7,7 +7,7 @@ import { ConfigProvider, theme } from "antd";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <BrowserRouter>
+    <BrowserRouter>
     <ConfigProvider
       theme={{
         token: {
@@ -18,6 +18,16 @@ root.render(
           wireframe: false,
         },
         algorithm: theme.darkAlgorithm,
+        components: {
+          Slider: {
+            trackBg: "#fff",
+            trackHoverBg: "#fff",
+            handleColor: "#fff",
+            handleActiveColor: "#fff",
+            dotBorderColor: "#fff",
+            dotActiveBorderColor: "#fff",
+          }
+        }
       }}
     >
       <App />

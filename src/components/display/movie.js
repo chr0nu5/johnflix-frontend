@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useNavigate } from "react-router-dom";
+
 import { CaretRightOutlined } from '@ant-design/icons';
 import { Button, Tag, Progress } from "antd";
 
@@ -86,6 +88,8 @@ const Buttons = styled.div `
 
 export default function Movie({ index, movie, counter, height, next, previous, selected, screen }) {
 
+    const navigate = useNavigate();
+
     const isNext = index > counter;
     const delay = isNext ? (index - counter) * 0.1 : 0;
 
@@ -101,6 +105,10 @@ export default function Movie({ index, movie, counter, height, next, previous, s
         var hDisplay = h > 0 ? h + (h === 1 ? "h " : "h ") : "";
         var mDisplay = m > 0 ? m + (m === 1 ? "m" : "m") : "";
         return hDisplay + mDisplay;
+    }
+
+    const play = () => {
+        navigate(`/play/${movie.hash}`);
     }
 
     return <Holder
@@ -139,7 +147,7 @@ export default function Movie({ index, movie, counter, height, next, previous, s
         </GenresTags> : <></>}
         <Buttons>
           {movie.progress && movie.progress > 0 ? <Progress percent={movie.progress / movie.duration * 100} status="active" showInfo={false} strokeColor={"#fff"} /> : <></>}
-          <Button size={"large"} icon={<CaretRightOutlined />}>{movie.progress && movie.progress > 0 ? "CONTINUE" : "PLAY"}</Button>
+          <Button onClick={play} size={"large"} icon={<CaretRightOutlined />}>{movie.progress && movie.progress > 0 ? "CONTINUE" : "PLAY"}</Button>
         </Buttons>
       </MovieInfo>
   </Holder>;
