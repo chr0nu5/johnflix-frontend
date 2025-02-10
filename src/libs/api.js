@@ -120,6 +120,14 @@ export default function Api() {
         );
     };
 
+    const getSubtitle = async (url) => {
+        return fetch(url, {
+            method: "GET",
+        }).then((response) => {
+            return response.text();
+        });
+    }
+
     const logout = () => {
         removeTokens();
     };
@@ -129,6 +137,7 @@ export default function Api() {
         getMovies,
         getRecommended,
         getMovie,
+        getSubtitle,
 
         login,
         logout,

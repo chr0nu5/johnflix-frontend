@@ -147,7 +147,7 @@ export default function Movie({ index, movie, counter, height, next, previous, s
         </GenresTags> : <></>}
         <Buttons>
           {movie.progress && movie.progress > 0 ? <Progress percent={movie.progress / movie.duration * 100} status="active" showInfo={false} strokeColor={"#fff"} /> : <></>}
-          <Button onClick={play} size={"large"} icon={<CaretRightOutlined />}>{movie.progress && movie.progress > 0 ? "CONTINUE" : "PLAY"}</Button>
+          {index === counter ? <Button onClick={play} size={"large"} icon={<CaretRightOutlined />}>{movie.progress && movie.progress > 0 ? "CONTINUE" : "PLAY"}</Button> : <></>}
         </Buttons>
       </MovieInfo>
   </Holder>;

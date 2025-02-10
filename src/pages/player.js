@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 
@@ -10,7 +11,8 @@ import {
     FullscreenOutlined,
     FullscreenExitOutlined,
     ExpandOutlined,
-    CompressOutlined
+    CompressOutlined,
+    ArrowLeftOutlined
 } from '@ant-design/icons';
 
 import Api from "../libs/api";
@@ -43,6 +45,8 @@ const Controls = styled.div `
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    opacity: 1;
+    transition: all 0.5s;
 `;
 
 const ControlsHolder = styled.div `
@@ -131,10 +135,102 @@ const ProgressRemaining = styled.div `
   text-align: center;
 `
 
+
+
+const ProgressBarBg = styled.div `
+    width: 100%;
+    height: 8px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.2);
+    position: relative;
+    cursor: pointer;
+`;
+
+const ProgressBarCurrent = styled.div `
+    height: 8px;
+    border-radius: 10px;
+    background: rgba(255,255,255,1);
+    z-index: 1;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+`;
+
+const TitleHolder = styled.div `
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+    z-index: 2;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    transition: all 0.5s;
+`;
+
+const Title = styled.div `
+    font-size: 48px;
+    font-family: "Anton", serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-right: 32px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+`;
+
+const BackButton = styled.div `
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 100px;
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+`;
+
+const Subtitle = styled.div `
+    text-align: center;
+    position: absolute;
+    bottom: 156px;
+    border-radius: 16px;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    padding: 8px 16px;
+    pointer-events: none;
+    max-width: 50%;
+    transition: all 0.5s;
+
+    span {
+        display: block;
+        font-size: 24px;
+    }
+`;
+
 export default function Player() {
 
     const api = Api();
     const { hash } = useParams();
+    const navigate = useNavigate();
 
     const [height, setHeight] = useState(window.innerHeight);
     const [width, setWidth] = useState(window.innerWidth);
@@ -144,8 +240,12 @@ export default function Player() {
 
     // video
 
+
     const videoRef = useRef(null);
+    const progressBarRef = useRef(null);
+
     const [isPlaying, setIsPlaying] = useState(false);
+    const [controlsVisible, setControlsVisible] = useState(true);
 
     const [currentTime, setCurrentTime] = useState(null);
     const [volume, setVolume] = useState(1);
@@ -155,6 +255,34 @@ export default function Player() {
     const [fullScreen, setFullScreen] = useState(false);
     const [fillScreen, setFillScreen] = useState(false);
 
+    const [subtitle, setSubtitle] = useState([]);
+    const [subtitleLine, setSubtitleLine] = useState("");
+
+    const controlsTimeout = useRef(null);
+    useEffect(() => {
+        if (!isPlaying) {
+            setControlsVisible(true);
+            return;
+        }
+
+        if (controlsTimeout.current) clearTimeout(controlsTimeout.current);
+
+        controlsTimeout.current = setTimeout(() => {
+            setControlsVisible(false);
+        }, 3000);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isPlaying]);
+
+    const handleMouseMove = () => {
+        setControlsVisible(true);
+        if (controlsTimeout.current) clearTimeout(controlsTimeout.current);
+
+        if (isPlaying) {
+            controlsTimeout.current = setTimeout(() => {
+                setControlsVisible(false);
+            }, 3000);
+        }
+    };
 
     const playPauseAction = () => {
         if (!videoRef.current.paused) {
@@ -166,9 +294,15 @@ export default function Player() {
         }
     }
 
-    const changeCurrentTime = (time) => {
-        videoRef.current.currentTime = time;
-        setCurrentTime(time);
+    const changeCurrentTime = (event) => {
+        if (progressBarRef.current) {
+            const rect = progressBarRef.current.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const width = rect.width;
+            const percent = (clickX / width);
+            setCurrentTime(duration * percent);
+            videoRef.current.currentTime = duration * percent
+        }
     }
 
     const changeVolume = (volume) => {
@@ -187,6 +321,13 @@ export default function Player() {
         return `${hrs.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}:${secRemain.toString().padStart(2, '0')}`;
     };
 
+    const getSubtitleForTime = (_currentTime) => {
+        const _subtitle = subtitle.find(
+            (sub) => _currentTime >= sub.startTime && _currentTime <= sub.endTime
+        );
+        return _subtitle ? _subtitle.text : "";
+    };
+
     useEffect(() => {
         const video = videoRef.current;
         if (!video) return;
@@ -194,7 +335,18 @@ export default function Player() {
         videoRef.current.volume = 1;
         setVolume(1);
 
-        const updateTime = () => setCurrentTime(video.currentTime);
+        const updateTime = () => {
+            setCurrentTime(videoRef.current.currentTime);
+
+            const _subtitleLine = getSubtitleForTime(videoRef.current.currentTime);
+            setSubtitleLine(_subtitleLine);
+
+            if (videoRef.current.paused) {
+                setIsPlaying(false);
+            } else {
+                setIsPlaying(true);
+            }
+        };
         const updateDuration = () => setDuration(video.duration);
         video.addEventListener("timeupdate", updateTime);
         video.addEventListener("loadedmetadata", updateDuration);
@@ -202,13 +354,81 @@ export default function Player() {
             video.removeEventListener("timeupdate", updateTime);
             video.removeEventListener("loadedmetadata", updateDuration);
         };
-    }, [media]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [media, subtitle]);
+
+    const cleanSubtitleText = (text) => {
+        return text.replace(/[^a-zA-Z0-9À-ÿ.,!?;:'"(){}\]\s-]/g, "").trim();
+    };
+
+    const parseSubtitle = (subtitleText) => {
+
+        const _regex = /(\d{2}):(\d{2}):(\d{2})[.,](\d{3}) --> (\d{2}):(\d{2}):(\d{2})[.,](\d{3})/;
+        return subtitleText
+            .trim()
+            .split(/\n\n+/)
+            .map((block) => {
+                const lines = block.split("\n");
+                let timeLine = null;
+                let text = [];
+
+
+                for (let line of lines) {
+                    const timeMatch = line.match(_regex);
+
+                    if (timeMatch) {
+                        timeLine = line;
+                        break;
+                    }
+                }
+
+                if (timeLine) {
+                    const timeMatch = timeLine.match(_regex);
+                    const startTime =
+                        parseInt(timeMatch[1]) * 3600 +
+                        parseInt(timeMatch[2]) * 60 +
+                        parseInt(timeMatch[3]) +
+                        parseInt(timeMatch[4]) / 1000;
+
+                    const endTime =
+                        parseInt(timeMatch[5]) * 3600 +
+                        parseInt(timeMatch[6]) * 60 +
+                        parseInt(timeMatch[7]) +
+                        parseInt(timeMatch[8]) / 1000;
+
+                    text = lines.slice(lines.indexOf(timeLine) + 1).join("\n");
+                    return { startTime, endTime, text: cleanSubtitleText(text) };
+                }
+                return null;
+            })
+            .filter(Boolean);
+    };
+
+    const formatTextWithBreaks = (text) => {
+        return text.split("\n").map((line, index) => (
+            <span key={index}>
+              {line}
+            </span>
+        ));
+    };
+
+    const downloadSubtitle = async (url) => {
+        const response = await api.getSubtitle(media.subtitle.vtt);
+        const _subtitle = parseSubtitle(response);
+        setSubtitle(_subtitle);
+    }
 
     useEffect(() => {
         if (media) {
             videoRef.current.currentTime = media.progress
             setCurrentTime(media.progress)
+
+            if (media.subtitle && media.subtitle.vtt) {
+                downloadSubtitle(media.subtitle.vtt);
+            }
+
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [media]);
 
     const [currentPlaybackRate, setCurrentPlaybackRate] = useState(1);
@@ -236,7 +456,7 @@ export default function Player() {
 
     const changePlaybackRate = (data) => {
         const selected = parseInt(data.key);
-        const values = [0, 1, 1.25, 1.5, 1.75, 1.75, 2];
+        const values = [0, 1, 1.25, 1.5, 1.75, 2];
         const finalPlaybackRate = values[selected];
         videoRef.current.playbackRate = finalPlaybackRate;
         setCurrentPlaybackRate(`${finalPlaybackRate}`);
@@ -280,9 +500,18 @@ export default function Player() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hash]);
 
-    return <Holder style={{width: width, height: height}} ref={fullScreenElement}>
+    const goHome = () => {
+        navigate("/")
+    }
+
+    return <Holder style={{width: width, height: height}} ref={fullScreenElement} onMouseMove={handleMouseMove}>
       {media && <>
-        <Controls style={{width: width - 48}}>
+        <TitleHolder style={{opacity: controlsVisible ? 1 : 0}}>
+            <BackButton onClick={goHome}><ArrowLeftOutlined /></BackButton>
+            <Title style={{width: width - 100}}>{media.title}</Title>
+        </TitleHolder>
+        {subtitleLine && subtitleLine.length > 0 ? <Subtitle style={{bottom: controlsVisible ? 156 : 24}}>{formatTextWithBreaks(subtitleLine)}</Subtitle> : <></>}
+        <Controls style={{width: width - 48, opacity: controlsVisible ? 1 : 0}}>
           <ControlsHolder>
             <ControlBlock className="left">
               <Slider
@@ -324,19 +553,14 @@ export default function Player() {
           <ProgressHolder>
             <ProgressCurrent>{sec2Time(currentTime)}</ProgressCurrent>
             <ProgressBar style={{width: width - 248}}>
-              {currentTime && <Slider
-                min={0}
-                max={duration}
-                defaultValue={currentTime}
-                style={{width: "100%"}}
-                tooltip={{ formatter: sec2Time }}
-                onChangeComplete={changeCurrentTime}
-              />}
+                <ProgressBarBg onClick={changeCurrentTime} ref={progressBarRef}>
+                    <ProgressBarCurrent style={{width: `${currentTime/duration*100}%`}}></ProgressBarCurrent>
+                </ProgressBarBg>
             </ProgressBar>
             <ProgressRemaining>{sec2Time(duration - currentTime)}</ProgressRemaining>
           </ProgressHolder>
         </Controls>
-        <Video ref={videoRef} preload="auto" poster={media.cover} style={{objectFit: fillScreen ? "cover" : "contain"}}>
+        <Video autoPlay ref={videoRef} preload="auto" poster={media.cover} style={{objectFit: fillScreen ? "cover" : "contain"}} onClick={playPauseAction}>
           <source src={media.media} type="video/mp4" />
         </Video>
       </>}
