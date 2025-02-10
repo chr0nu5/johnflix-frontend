@@ -4,7 +4,14 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { Slider, Dropdown } from "antd";
-import { PauseOutlined, CaretRightOutlined } from '@ant-design/icons';
+import {
+    PauseOutlined,
+    CaretRightOutlined,
+    FullscreenOutlined,
+    FullscreenExitOutlined,
+    ExpandOutlined,
+    CompressOutlined
+} from '@ant-design/icons';
 
 import Api from "../libs/api";
 
@@ -20,7 +27,6 @@ const Video = styled.video `
   top: 0px;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   background: transparent;
   z-index: 0;
 `;
@@ -75,7 +81,7 @@ const ControlBlockButton = styled.div `
   color: rgba(255,255,255,1);
   cursor: pointer;
   border-radius: 6px;
-  margin-left: 24px;
+  margin-left: 16px;
 `;
 
 const PlayPauseButton = styled.div `
@@ -141,9 +147,13 @@ export default function Player() {
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const [currentTime, setCurrentTime] = useState(0);
+    const [currentTime, setCurrentTime] = useState(null);
     const [volume, setVolume] = useState(1);
     const [duration, setDuration] = useState(0);
+
+    const fullScreenElement = useRef(null);
+    const [fullScreen, setFullScreen] = useState(false);
+    const [fillScreen, setFillScreen] = useState(false);
 
 
     const playPauseAction = () => {
@@ -196,6 +206,7 @@ export default function Player() {
 
     useEffect(() => {
         if (media) {
+            videoRef.current.currentTime = media.progress
             setCurrentTime(media.progress)
         }
     }, [media]);
@@ -231,6 +242,22 @@ export default function Player() {
         setCurrentPlaybackRate(`${finalPlaybackRate}`);
     }
 
+    const changeFillScreen = () => {
+        if (fillScreen) {
+            setFillScreen(false);
+        } else {
+            setFillScreen(true)
+        }
+    }
+
+    const changeFullScreen = () => {
+        if (!document.fullscreenElement) {
+            fullScreenElement.current.requestFullscreen().then(() => setFullScreen(true));
+        } else {
+            document.exitFullscreen().then(() => setFullScreen(false));
+        }
+    }
+
     // end video
 
     const getMedia = async () => {
@@ -253,7 +280,7 @@ export default function Player() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hash]);
 
-    return <Holder style={{width: width, height: height}}>
+    return <Holder style={{width: width, height: height}} ref={fullScreenElement}>
       {media && <>
         <Controls style={{width: width - 48}}>
           <ControlsHolder>
@@ -286,24 +313,30 @@ export default function Player() {
               >
                 <ControlBlockButton>{currentPlaybackRate}x</ControlBlockButton>
               </Dropdown>
+              <ControlBlockButton onClick={changeFillScreen}>
+                {fillScreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+              </ControlBlockButton>
+              <ControlBlockButton onClick={changeFullScreen}>
+                {fullScreen ? <CompressOutlined /> : <ExpandOutlined />}
+              </ControlBlockButton>
             </ControlBlock>
           </ControlsHolder>
           <ProgressHolder>
             <ProgressCurrent>{sec2Time(currentTime)}</ProgressCurrent>
             <ProgressBar style={{width: width - 248}}>
-              <Slider
+              {currentTime && <Slider
                 min={0}
                 max={duration}
                 defaultValue={currentTime}
                 style={{width: "100%"}}
                 tooltip={{ formatter: sec2Time }}
                 onChangeComplete={changeCurrentTime}
-              />
+              />}
             </ProgressBar>
             <ProgressRemaining>{sec2Time(duration - currentTime)}</ProgressRemaining>
           </ProgressHolder>
         </Controls>
-        <Video ref={videoRef} preload="auto" poster={media.cover}>
+        <Video ref={videoRef} preload="auto" poster={media.cover} style={{objectFit: fillScreen ? "cover" : "contain"}}>
           <source src={media.media} type="video/mp4" />
         </Video>
       </>}

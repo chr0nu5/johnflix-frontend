@@ -31,7 +31,11 @@ export default function Home() {
 
     const getRecommended = async () => {
         const data = await api.getRecommended();
-        setMovies(data);
+        if (data.results) {
+            setMovies(data.results)
+        } else {
+            setMovies(data);
+        }
     };
 
     useEffect(() => {
