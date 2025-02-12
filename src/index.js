@@ -7,7 +7,7 @@ import { ConfigProvider, theme } from "antd";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <BrowserRouter>
+  <BrowserRouter>
     <ConfigProvider
       theme={{
         token: {
@@ -26,10 +26,9 @@ root.render(
             handleActiveColor: "#fff",
             dotBorderColor: "#fff",
             dotActiveBorderColor: "#fff",
-          }
-        }
-      }}
-    >
+          },
+        },
+      }}>
       <App />
     </ConfigProvider>
   </BrowserRouter>

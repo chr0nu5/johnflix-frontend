@@ -46,9 +46,9 @@ const LoginLogo = styled.div`
   padding: 0px 24px 24px 24px;
 
   img {
-  height: 40px;
-  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-  filter: grayscale(100%);
+    height: 40px;
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
   }
 `;
 
@@ -142,8 +142,7 @@ export default function Login() {
               type="primary"
               loading={loading}
               block
-              onClick={!loading ? login : () => { }}
-            >
+              onClick={!loading ? login : () => {}}>
               {loading ? "Wait" : "Sign In"}
             </Button>
           </Field>

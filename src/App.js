@@ -10,9 +10,8 @@ import Home from "./pages/home.js";
 import Player from "./pages/player.js";
 
 function App() {
-    return (
-        <Routes>
-
+  return (
+    <Routes>
       <Route path="/" element={<Home />} />
 
       <Route path="/play/:hash" element={<Player />} />
@@ -20,7 +19,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<Blank />} />
     </Routes>
-    );
+  );
 }
 
 export default App;
