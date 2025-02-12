@@ -227,8 +227,6 @@ export default function Movie({
         )}
         <Buttons>
           <Button
-            variant="outlined"
-            color="danger"
             onClick={index === counter ? play : () => {}}
             size={"large"}
             icon={<CaretRightOutlined />}>
