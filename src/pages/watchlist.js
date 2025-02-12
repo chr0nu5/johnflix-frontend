@@ -11,7 +11,7 @@ const Holder = styled.div`
   height: 100%;
 `;
 
-export default function Home() {
+export default function Movies() {
   const api = Api();
 
   const [height, setHeight] = useState(window.innerHeight);

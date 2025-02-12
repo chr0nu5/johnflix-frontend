@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+
+import Api from "../libs/api";
+
+import { UserOutlined } from "@ant-design/icons";
+import { Avatar } from "antd";
+import { Dropdown } from "antd";
 
 const Holder = styled.div`
   position: fixed;
@@ -33,19 +39,106 @@ const Logo = styled.div`
     cursor: pointer;
   }
 `;
-const Items = styled.div``;
-const User = styled.div``;
+
+const Items = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+  gap: 24px;
+  padding-left: 16px;
+  padding-top: 8px;
+
+  a {
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    font-family: "Anton", serif;
+    font-weight: 200;
+    letter-spacing: 1px;
+
+    &:hover {
+      color: #ed2517;
+    }
+  }
+`;
+
+const User = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+`;
 
 export default function Menu() {
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh");
+    navigate("/login");
+  };
+
+  const onClick = ({ key }) => {
+    console.log(`Click on item ${key}`);
+    if (key === "2") {
+      navigate("/watchlist");
+    } else if (key === "3") {
+      logout();
+    }
+  };
+
+  const [user, setUser] = useState({});
+
   const navigate = useNavigate();
+  const api = Api();
+
+  const getProfile = async () => {
+    const response = await api.getProfile();
+    setUser(response);
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   return (
     <Holder>
       <Logo onClick={() => navigate("/")}>
         <img src="/img/icon.png" alt="JohnFLIX" />
       </Logo>
-      <Items></Items>
-      <User></User>
+      <Items>
+        {user &&
+          user.menu &&
+          user.menu.map((item, index) => {
+            return (
+              <a
+                onClick={() => {
+                  navigate(`/${item.url}`);
+                }}
+                key={index}>
+                {item.name}
+              </a>
+            );
+          })}
+      </Items>
+      <User>
+        <Dropdown
+          menu={{
+            items: [
+              {
+                label: "My Watchlist",
+                key: "2",
+              },
+              {
+                label: "Logout",
+                key: "3",
+              },
+            ],
+            onClick,
+          }}>
+          <Avatar style={{ borderColor: "#fff" }} icon={<UserOutlined />} />
+        </Dropdown>
+      </User>
     </Holder>
   );
 }

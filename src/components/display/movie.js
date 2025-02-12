@@ -206,7 +206,7 @@ export default function Movie({
           disablePictureInPicture>
           <source
             src={`${movie.media}#t=${(movie.duration / 100) * 40},${
-              (movie.duration / 100) * 45
+              (movie.duration / 100) * 50
             }`}
             type="video/mp4"
           />
