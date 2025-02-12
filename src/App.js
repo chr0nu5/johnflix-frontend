@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import "./styles/main.css";
 
@@ -17,7 +17,36 @@ import Watchlist from "./pages/watchlist.js";
 
 import Player from "./pages/player.js";
 
+const useKeyboardListener = () => {
+  const [input, setInput] = useState("");
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "Enter") {
+        if (input === "hidden") {
+          localStorage.setItem("hidden", "true");
+          window.location.reload();
+        } else if (input === "normal") {
+          localStorage.setItem("hidden", "false");
+          window.location.reload();
+        }
+        setInput("");
+      } else {
+        setInput((prev) => prev + event.key);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [input]);
+};
+
 function App() {
+  useKeyboardListener();
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
