@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import { CaretRightOutlined } from "@ant-design/icons";
-import { Button, Tag, Progress } from "antd";
+import { Button, Tag, Progress, Avatar, Tooltip } from "antd";
 
 const Holder = styled.div`
   position: absolute;
@@ -86,6 +86,10 @@ const Description = styled.div`
 `;
 const GenresTags = styled.div`
   margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 8px;
 `;
 const Buttons = styled.div`
   margin-top: 24px;
@@ -166,14 +170,45 @@ export default function Movie({
           <Tag color="orange">{parseDuration(movie.duration)}</Tag>
         </PlayInfo>
         {movie.description && <Description>{movie.description}</Description>}
-        {movie.tag.length > 0 || movie.genre.length > 0 ? (
+        {(movie.tag.length > 0 || movie.genre.length > 0) &&
+        index === counter ? (
           <GenresTags>
-            {movie.tag.map((tag) => {
-              return <Tag color="red">{tag.name}</Tag>;
-            })}
-            {movie.genre.map((genre) => {
-              return <Tag color="green">{genre.name}</Tag>;
-            })}
+            <Avatar.Group
+              max={{
+                count: 5,
+              }}>
+              {movie.tag.map((tag) => {
+                return (
+                  <Tooltip title={tag.name} placement="top">
+                    <Avatar
+                      src={tag.cover}
+                      onClick={() => {
+                        navigate(`/tag/${tag.hash}`);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                );
+              })}
+            </Avatar.Group>
+            <Avatar.Group
+              max={{
+                count: 5,
+              }}>
+              {movie.genre.map((genre) => {
+                return (
+                  <Tooltip title={genre.name} placement="top">
+                    <Avatar
+                      src={genre.cover}
+                      onClick={() => {
+                        navigate(`/tag/${genre.hash}`);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                );
+              })}
+            </Avatar.Group>
           </GenresTags>
         ) : (
           <></>
