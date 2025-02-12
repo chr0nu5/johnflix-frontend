@@ -99,7 +99,6 @@ const Video = styled.video`
   background: transparent;
   z-index: 0;
   object-fit: cover;
-  filter: blur(5px);
 `;
 
 export default function Movie({
