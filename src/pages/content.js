@@ -24,7 +24,7 @@ export default function Content() {
 
   const [movies, setMovies] = useState([]);
 
-  const getRecommended = async () => {
+  const getData = async () => {
     const data = await api.getMovies();
     if (data.results) {
       setMovies(data.results);
@@ -39,7 +39,7 @@ export default function Content() {
   }, []);
 
   useEffect(() => {
-    getRecommended();
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

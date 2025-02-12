@@ -13,6 +13,8 @@ import Genres from "./pages/genres.js";
 import Tags from "./pages/tags.js";
 import Content from "./pages/content.js";
 
+import Watchlist from "./pages/watchlist.js";
+
 import Player from "./pages/player.js";
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
       <Route path="/content/:hash" element={<Content />} />
 
       <Route path="/play/:hash" element={<Player />} />
+
+      <Route path="/watchlist" element={<Watchlist />} />
 
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<Blank />} />

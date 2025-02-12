@@ -11,7 +11,7 @@ const Holder = styled.div`
   height: 100%;
 `;
 
-export default function Movies() {
+export default function Watchlist() {
   const api = Api();
 
   const [height, setHeight] = useState(window.innerHeight);
@@ -24,10 +24,10 @@ export default function Movies() {
 
   const [movies, setMovies] = useState([]);
 
-  const getRecommended = async () => {
-    const data = await api.getMovies();
-    if (data.results) {
-      setMovies(data.results);
+  const getData = async () => {
+    const data = await api.getUserWatchlist();
+    if (data.movies && data.movies.results) {
+      setMovies(data.movies.results);
     } else {
       setMovies(data);
     }
@@ -39,7 +39,7 @@ export default function Movies() {
   }, []);
 
   useEffect(() => {
-    getRecommended();
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

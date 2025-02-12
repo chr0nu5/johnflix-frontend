@@ -3,6 +3,13 @@ const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 export default function Api() {
   let token = localStorage.getItem("token");
   let refreshToken = localStorage.getItem("refresh");
+  let hidden = localStorage.getItem("hidden");
+
+  if (hidden === "true") {
+    hidden = "true";
+  } else {
+    hidden = "false";
+  }
 
   const saveTokens = (newToken, newRefreshToken) => {
     if (newToken) {
@@ -99,24 +106,24 @@ export default function Api() {
   };
 
   const getRecommended = async () => {
-    return fetch(`${API_URL}/recommended/?hidden=false&limit=8`, {
+    return fetch(`${API_URL}/recommended/?hidden=${hidden}&limit=8`, {
       method: "GET",
       headers: getHeaders(),
     }).then((response) =>
       handleResponse(response, {
-        url: `${API_URL}/recommended/?hidden=false&limit=8`,
+        url: `${API_URL}/recommended/?hidden=${hidden}&limit=8`,
         method: "GET",
       })
     );
   };
 
   const getMovies = async () => {
-    return fetch(`${API_URL}/movies/?hidden=false&limit=8`, {
+    return fetch(`${API_URL}/movies/?hidden=${hidden}&limit=8`, {
       method: "GET",
       headers: getHeaders(),
     }).then((response) =>
       handleResponse(response, {
-        url: `${API_URL}/movies/?hidden=false&limit=8`,
+        url: `${API_URL}/movies/?hidden=${hidden}&limit=8`,
         method: "GET",
       })
     );
@@ -142,6 +149,18 @@ export default function Api() {
     });
   };
 
+  const getUserWatchlist = async (hash) => {
+    return fetch(`${API_URL}/user/watchlist/?hidden=${hidden}`, {
+      method: "GET",
+      headers: getHeaders(),
+    }).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/user/watchlist/?hidden=${hidden}`,
+        method: "GET",
+      })
+    );
+  };
+
   const logout = () => {
     removeTokens();
   };
@@ -152,6 +171,8 @@ export default function Api() {
     getRecommended,
     getMovie,
     getSubtitle,
+
+    getUserWatchlist,
 
     login,
     logout,
