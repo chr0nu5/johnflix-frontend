@@ -197,7 +197,13 @@ export default function Movie({
         </Buttons>
       </MovieInfo>
       {index === counter && (
-        <Video autoPlay muted playsInline loop preload="auto">
+        <Video
+          autoPlay
+          muted
+          playsInline
+          loop
+          preload="auto"
+          disablePictureInPicture>
           <source
             src={`${movie.media}#t=${(movie.duration / 100) * 40},${
               (movie.duration / 100) * 45

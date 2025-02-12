@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Api from "../libs/api";
 
 import Display from "../components/display/display";
+import Menu from "../components/menu";
 
 const Holder = styled.div`
   width: 100%;
@@ -47,6 +48,7 @@ export default function Home() {
 
   return (
     <Holder>
+      <Menu />
       <Display movies={movies} width={width} height={height} />
     </Holder>
   );
