@@ -163,6 +163,7 @@ const TitleHolder = styled.div`
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.2) 80%,
     rgba(0, 0, 0, 0) 100%
   );
   z-index: 2;
