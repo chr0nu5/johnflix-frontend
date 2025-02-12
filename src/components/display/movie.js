@@ -17,7 +17,7 @@ const Holder = styled.div`
   left: 50%;
   transform: translate(-50%, 0) scale(1);
   overflow: hidden;
-  transition: all 1s cubic-bezier(1, 0.26, 0.31, 1);
+  transition: all 1s cubic-bezier(0.3, 0.7, 0.3, 1);
   border: 0px solid #000;
 
   &.previous {
@@ -58,7 +58,7 @@ const MovieShadow = styled.div`
   position: absolute;
   left: 0px;
   top: 0px;
-  transition: all 1s cubic-bezier(1, 0.26, 0.31, 1);
+  transition: all 1s cubic-bezier(0.3, 0.7, 0.3, 1);
   z-index: 1;
 `;
 
@@ -67,7 +67,7 @@ const MovieInfo = styled.div`
   left: 48px;
   bottom: 48px;
   z-index: 2;
-  transition: all 1s cubic-bezier(1, 0.26, 0.31, 1);
+  transition: all 1s cubic-bezier(0.3, 0.7, 0.3, 1);
 `;
 
 const Title = styled.div`
@@ -152,7 +152,7 @@ export default function Movie({
         index === counter ? "active" : ""
       } ${isNext ? "next" : ""}`}
       onClick={() => {
-        index === counter ? previous() : selected(index);
+        selected(index);
       }}>
       <MovieShadow style={{ opacity: index <= counter ? 1 : 0 }} />
       <MovieInfo
