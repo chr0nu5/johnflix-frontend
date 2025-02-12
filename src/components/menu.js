@@ -49,7 +49,7 @@ const Items = styled.div`
   padding-left: 16px;
   padding-top: 8px;
 
-  a {
+  span {
     font-weight: bold;
     cursor: pointer;
     display: block;
@@ -99,6 +99,7 @@ export default function Menu() {
 
   useEffect(() => {
     getProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -111,13 +112,13 @@ export default function Menu() {
           user.menu &&
           user.menu.map((item, index) => {
             return (
-              <a
+              <span
                 onClick={() => {
                   navigate(`/${item.url}`);
                 }}
                 key={index}>
                 {item.name}
-              </a>
+              </span>
             );
           })}
       </Items>
