@@ -48,9 +48,9 @@ const Holder = styled.div`
 
 const MovieShadow = styled.div`
   background: linear-gradient(
-    45deg,
+    0deg,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 1) 10%,
+    rgba(0, 0, 0, 1) 20%,
     rgba(0, 0, 0, 0) 100%
   );
   width: 100%;
@@ -230,7 +230,7 @@ export default function Movie({
             onClick={index === counter ? play : () => {}}
             size={"large"}
             icon={<CaretRightOutlined />}>
-            {movie.progress && movie.progress > 0 ? "CONTINUE" : "PLAY"}
+            PLAY
           </Button>
         </Buttons>
       </MovieInfo>

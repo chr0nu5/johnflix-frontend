@@ -1,5 +1,6 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import "./styles/main.css";
 
@@ -45,24 +46,30 @@ const useKeyboardListener = () => {
 };
 
 function App() {
+  const location = useLocation();
+
   useKeyboardListener();
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
+    <TransitionGroup>
+      <CSSTransition key={location.pathname} classNames="page" timeout={500}>
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
 
-      <Route path="/movies" element={<Movies />} />
-      <Route path="/genres" element={<Genres />} />
-      <Route path="/tags" element={<Tags />} />
-      <Route path="/content/:hash" element={<Content />} />
+          <Route path="/movies" element={<Movies />} />
+          <Route path="/genres" element={<Genres />} />
+          <Route path="/tags" element={<Tags />} />
+          <Route path="/content/:hash" element={<Content />} />
 
-      <Route path="/play/:hash" element={<Player />} />
+          <Route path="/play/:hash" element={<Player />} />
 
-      <Route path="/watchlist" element={<Watchlist />} />
+          <Route path="/watchlist" element={<Watchlist />} />
 
-      <Route path="/login" element={<Login />} />
-      <Route path="*" element={<Blank />} />
-    </Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Blank />} />
+        </Routes>
+      </CSSTransition>
+    </TransitionGroup>
   );
 }
 

@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <Holder>
       <Menu />
-      <Display movies={movies} width={width} height={height} />
+      <Display movies={movies} width={width} height={height} more={"/movies"} />
     </Holder>
   );
 }

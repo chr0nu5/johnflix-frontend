@@ -25,7 +25,7 @@ export default function Movies() {
   const [movies, setMovies] = useState([]);
 
   const getData = async () => {
-    const data = await api.getMovies();
+    const data = await api.getRecommended();
     if (data.results) {
       setMovies(data.results);
     } else {

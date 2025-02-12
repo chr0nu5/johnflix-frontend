@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { useNavigate } from "react-router-dom";
+
+import { Tooltip } from "antd";
+
 import Movie from "./movie";
 
-import { RightCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
+import {
+  RightCircleOutlined,
+  LeftCircleOutlined,
+  ArrowRightOutlined,
+} from "@ant-design/icons";
 
 const Holder = styled.div`
   overflow: hidden;
@@ -36,7 +44,29 @@ const Arrows = styled.div`
   }
 `;
 
-export default function Display({ movies, width, height }) {
+const ViewMore = styled.div`
+  position: absolute;
+  bottom: 16px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 41;
+  cursor: pointer;
+
+  left: 50%;
+  margin-left: 80px;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
+export default function Display({ movies, width, height, more }) {
+  const navigate = useNavigate();
+
   const [counter, setCounter] = useState(0);
 
   const next = () => {
@@ -83,6 +113,16 @@ export default function Display({ movies, width, height }) {
         <Arrows className={"right"} onClick={next}>
           <RightCircleOutlined />
         </Arrows>
+      )}
+      {more && (
+        <ViewMore
+          onClick={() => {
+            navigate(more);
+          }}>
+          <Tooltip title="View more">
+            <ArrowRightOutlined />
+          </Tooltip>
+        </ViewMore>
       )}
     </>
   );
