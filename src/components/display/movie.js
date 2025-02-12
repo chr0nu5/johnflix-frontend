@@ -76,13 +76,15 @@ const Title = styled.div`
   font-weight: 400;
   text-transform: uppercase;
   line-height: 100%;
+  pointer-events: none;
 `;
 
 const PlayInfo = styled.div`
-  /*  margin-top: 24px;*/
+  pointer-events: none;
 `;
 const Description = styled.div`
   margin-top: 24px;
+  pointer-events: none;
 `;
 const GenresTags = styled.div`
   margin-top: 24px;
@@ -165,6 +167,16 @@ export default function Movie({
           width: screen / 3,
         }}>
         <Title>{movie.title}</Title>
+        {movie.progress && movie.progress > 0 ? (
+          <Progress
+            percent={(movie.progress / movie.duration) * 100}
+            status="active"
+            showInfo={false}
+            strokeColor={"#fff"}
+          />
+        ) : (
+          <></>
+        )}
         <PlayInfo>
           <Tag color="gold">{parseYear(movie.date)}</Tag>
           <Tag color="orange">{parseDuration(movie.duration)}</Tag>
@@ -214,17 +226,9 @@ export default function Movie({
           <></>
         )}
         <Buttons>
-          {movie.progress && movie.progress > 0 ? (
-            <Progress
-              percent={(movie.progress / movie.duration) * 100}
-              status="active"
-              showInfo={false}
-              strokeColor={"#fff"}
-            />
-          ) : (
-            <></>
-          )}
           <Button
+            variant="outlined"
+            color="danger"
             onClick={index === counter ? play : () => {}}
             size={"large"}
             icon={<CaretRightOutlined />}>
