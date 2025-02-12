@@ -58,14 +58,14 @@ const MovieShadow = styled.div`
   left: 0px;
   top: 0px;
   transition: all 1s cubic-bezier(1, 0.26, 0.31, 1);
-  z-index: 0;
+  z-index: 1;
 `;
 
 const MovieInfo = styled.div`
   position: absolute;
   left: 48px;
   bottom: 48px;
-  z-index: 1;
+  z-index: 2;
   transition: all 1s cubic-bezier(1, 0.26, 0.31, 1);
 `;
 
@@ -88,6 +88,18 @@ const GenresTags = styled.div`
 `;
 const Buttons = styled.div`
   margin-top: 24px;
+`;
+
+const Video = styled.video`
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 0;
+  object-fit: cover;
+  filter: blur(5px);
 `;
 
 export default function Movie({
@@ -185,6 +197,16 @@ export default function Movie({
           </Button>
         </Buttons>
       </MovieInfo>
+      {index === counter && (
+        <Video autoPlay muted playsInline loop preload="auto">
+          <source
+            src={`${movie.media}#t=${(movie.duration / 100) * 40},${
+              (movie.duration / 100) * 45
+            }`}
+            type="video/mp4"
+          />
+        </Video>
+      )}
     </Holder>
   );
 }
