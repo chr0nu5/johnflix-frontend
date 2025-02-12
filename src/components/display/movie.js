@@ -25,6 +25,7 @@ const Holder = styled.div`
     height: 120% !important;
     filter: blur(40px);
     border-radius: 0px;
+    bottom: 112px;
   }
 
   &.active {
