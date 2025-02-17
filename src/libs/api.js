@@ -144,6 +144,18 @@ export default function Api() {
     );
   };
 
+  const getPlaylists = async () => {
+    return fetch(`${API_URL}/playlists/?hidden=${hidden}`, {
+      method: "GET",
+      headers: getHeaders(),
+    }).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/playlists/?hidden=${hidden}`,
+        method: "GET",
+      })
+    );
+  };
+
   const getMovie = async (hash) => {
     return fetch(`${API_URL}/movies/?hash=${hash}`, {
       method: "GET",
@@ -193,10 +205,11 @@ export default function Api() {
   };
 
   return {
-    getLatestMovies,
     getMovies,
 
     getRecommended,
+    getLatestMovies,
+    getPlaylists,
 
     getMovie,
     getSubtitle,

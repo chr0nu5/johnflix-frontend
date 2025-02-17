@@ -24,6 +24,7 @@ export default function Home() {
 
   const [latestMovies, setLatestMovies] = useState([]);
   const [userWatchList, setUserWatchList] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
 
   const getLatestMovies = async () => {
     const data = await api.getLatestMovies();
@@ -35,6 +36,11 @@ export default function Home() {
     setUserWatchList(data.results);
   };
 
+  const getPlaylists = async () => {
+    const data = await api.getPlaylists();
+    setPlaylists(data.results);
+  };
+
   useEffect(() => {
     window.addEventListener("resize", handleWindowSizeChange);
     window.addEventListener("load", handleWindowSizeChange);
@@ -43,6 +49,7 @@ export default function Home() {
   useEffect(() => {
     getLatestMovies();
     getUserWatchingList();
+    getPlaylists();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -62,6 +69,17 @@ export default function Home() {
         height={height}
         title={"Continue Watching"}
       />
+      {playlists.map((playlist, index) => {
+        return (
+          <Display
+            key={index}
+            movies={playlist.movies}
+            width={width}
+            height={height}
+            title={playlist.name}
+          />
+        );
+      })}
     </Holder>
   );
 }
