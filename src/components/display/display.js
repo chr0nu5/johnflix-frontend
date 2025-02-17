@@ -12,13 +12,18 @@ const Holder = styled.div`
 
 const Title = styled.div`
   position: absolute;
-  left: 50%;
-  font-size: 24px;
+  left: 48px;
+  font-size: 80px;
   color: #fff;
   font-family: "Anton", serif;
   font-weight: 400;
   z-index: 40;
   text-transform: uppercase;
+  top: 128px;
+  opacity: 0.24;
+  text-shadow: 0px 0px 20px #000000;
+  pointer-events: none;
+  line-height: 100%;
 `;
 
 const Arrows = styled.div`
@@ -31,6 +36,12 @@ const Arrows = styled.div`
   justify-content: center;
   z-index: 41;
   cursor: pointer;
+  opacity: 0.32;
+  bottom: 56px;
+
+  &:hover {
+    opacity: 0.64;
+  }
 
   svg {
     width: 40px;
@@ -39,7 +50,7 @@ const Arrows = styled.div`
 
   &.left {
     left: 50%;
-    margin-left: -48px;
+    margin-left: -32px;
   }
   &.right {
     left: 50%;
@@ -91,22 +102,20 @@ export default function Display({ movies, width, height, more, title }) {
           counter={counter}
         />
       )}
-      {title && counter < movies.length - 1 && (
-        <Title
-          style={{
-            marginLeft: `-${(height * 0.3) / 2 - 8}px`,
-            bottom: height * 0.3 + 32,
-          }}>
-          {title}
-        </Title>
-      )}
+      {title && counter < movies.length - 1 && <Title>{title}</Title>}
       {counter > 0 && (
-        <Arrows className={"left"} onClick={previous}>
+        <Arrows
+          style={{ marginLeft: `-${(height * 0.3) / 2 + 16 - 16}px` }}
+          className={"left"}
+          onClick={previous}>
           <LeftCircleOutlined />
         </Arrows>
       )}
       {counter < movies.length - 1 && (
-        <Arrows className={"right"} onClick={next}>
+        <Arrows
+          style={{ marginLeft: `-${(height * 0.3) / 2 - 32 - 16}px` }}
+          className={"right"}
+          onClick={next}>
           <RightCircleOutlined />
         </Arrows>
       )}

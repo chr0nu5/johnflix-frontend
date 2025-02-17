@@ -62,6 +62,22 @@ const MovieShadow = styled.div`
   z-index: 1;
 `;
 
+const MovieShadow2 = styled.div`
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 20%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  transition: all 1s cubic-bezier(0.3, 0.7, 0.3, 1);
+  z-index: 1;
+`;
+
 const MovieInfo = styled.div`
   position: absolute;
   left: 48px;
@@ -77,6 +93,7 @@ const Title = styled.div`
   text-transform: uppercase;
   line-height: 100%;
   pointer-events: none;
+  user-select: none;
 `;
 
 const PlayInfo = styled.div`
@@ -212,6 +229,7 @@ export default function Movie({
         selected(index);
       }}>
       <MovieShadow style={{ opacity: index <= counter ? 1 : 0 }} />
+      <MovieShadow2 style={{ opacity: index <= counter ? 1 : 0 }} />
       <MovieInfo
         style={{
           opacity: index === counter ? 1 : 0,
@@ -229,7 +247,7 @@ export default function Movie({
           <></>
         )}
         <PlayInfo>
-          <Tag color="gold">{parseYear(movie.date)}</Tag>
+          {movie.date && <Tag color="gold">{parseYear(movie.date)}</Tag>}
           <Tag color="orange">{parseDuration(movie.duration)}</Tag>
         </PlayInfo>
         {movie.media && movie.season && movie.number && (
