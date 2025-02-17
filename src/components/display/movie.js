@@ -108,15 +108,46 @@ const Video = styled.video`
   object-fit: cover;
 `;
 
+const More = styled.div`
+  position: absolute;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  left: 50%;
+  transform: translate(-50%, 0) scale(1);
+  overflow: hidden;
+  transition: all 1s cubic-bezier(0.3, 0.7, 0.3, 1);
+  border-radius: 10px;
+  -webkit-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 1);
+  -moz-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 1);
+  box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 1);
+  cursor: pointer;
+  bottom: 112px;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 export default function Movie({
   index,
   movie,
   counter,
   height,
-  next,
-  previous,
   selected,
   screen,
+  more,
 }) {
   const navigate = useNavigate();
 
@@ -141,7 +172,27 @@ export default function Movie({
     navigate(`/play/${movie.hash}`);
   };
 
-  return (
+  return more ? (
+    <More
+      key={index + 99}
+      onClick={() => {
+        navigate(more);
+      }}
+      style={{
+        zIndex: index,
+        marginLeft: `${
+          isNext ? `${(index - counter - 1) * (height + 24)}px` : "0px"
+        }`,
+        height: `${height * 0.64}px`,
+        width: `${height}px`,
+        transitionDelay: `${delay}s`,
+      }}
+      className={`${index < counter ? "previous" : ""} ${
+        index === counter ? "active" : ""
+      } ${isNext ? "next" : ""}`}>
+      View more
+    </More>
+  ) : (
     <Holder
       key={index}
       style={{
@@ -181,6 +232,15 @@ export default function Movie({
           <Tag color="gold">{parseYear(movie.date)}</Tag>
           <Tag color="orange">{parseDuration(movie.duration)}</Tag>
         </PlayInfo>
+        {movie.media && movie.season && movie.number && (
+          <Description style={{ textTransform: "uppercase" }}>
+            {movie.media}{" "}
+            <strong style={{ color: "#ed2517" }}>
+              S{movie.season}
+              {movie.number}
+            </strong>
+          </Description>
+        )}
         {movie.description && <Description>{movie.description}</Description>}
         {(movie.tag.length > 0 || movie.genre.length > 0) &&
         index === counter ? (

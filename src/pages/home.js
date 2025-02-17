@@ -22,15 +22,17 @@ export default function Home() {
     setWidth(window.innerWidth);
   }
 
-  const [movies, setMovies] = useState([]);
+  const [latestMovies, setLatestMovies] = useState([]);
+  const [userWatchList, setUserWatchList] = useState([]);
 
-  const getData = async () => {
-    const data = await api.getMovies();
-    if (data.results) {
-      setMovies(data.results);
-    } else {
-      setMovies(data);
-    }
+  const getLatestMovies = async () => {
+    const data = await api.getLatestMovies();
+    setLatestMovies(data.results);
+  };
+
+  const getUserWatchingList = async () => {
+    const data = await api.getUserWatchinglist();
+    setUserWatchList(data.results);
   };
 
   useEffect(() => {
@@ -39,14 +41,27 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getData();
+    getLatestMovies();
+    getUserWatchingList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Holder>
       <Menu />
-      <Display movies={movies} width={width} height={height} more={"/movies"} />
+      <Display
+        movies={latestMovies}
+        width={width}
+        height={height}
+        more={"/movies"}
+        title={"Latest Releases"}
+      />
+      <Display
+        movies={userWatchList}
+        width={width}
+        height={height}
+        title={"Continue Watching"}
+      />
     </Holder>
   );
 }

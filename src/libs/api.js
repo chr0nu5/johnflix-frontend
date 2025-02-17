@@ -117,6 +117,21 @@ export default function Api() {
     );
   };
 
+  const getLatestMovies = async () => {
+    return fetch(
+      `${API_URL}/movies/?hidden=${hidden}&limit=8&order_by=created_date&order_direction=desc`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    ).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/movies/?hidden=${hidden}&limit=8&order_by=created_date&order_direction=desc`,
+        method: "GET",
+      })
+    );
+  };
+
   const getMovies = async () => {
     return fetch(`${API_URL}/movies/?hidden=${hidden}&limit=8`, {
       method: "GET",
@@ -149,7 +164,7 @@ export default function Api() {
     });
   };
 
-  const getUserWatchlist = async (hash) => {
+  const getUserWatchlist = async () => {
     return fetch(`${API_URL}/user/watchlist/?hidden=${hidden}`, {
       method: "GET",
       headers: getHeaders(),
@@ -161,18 +176,34 @@ export default function Api() {
     );
   };
 
+  const getUserWatchinglist = async () => {
+    return fetch(`${API_URL}/user/watching/?hidden=${hidden}`, {
+      method: "GET",
+      headers: getHeaders(),
+    }).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/user/watching/?hidden=${hidden}`,
+        method: "GET",
+      })
+    );
+  };
+
   const logout = () => {
     removeTokens();
   };
 
   return {
-    getProfile,
+    getLatestMovies,
     getMovies,
+
     getRecommended,
+
     getMovie,
     getSubtitle,
 
+    getProfile,
     getUserWatchlist,
+    getUserWatchinglist,
 
     login,
     logout,
