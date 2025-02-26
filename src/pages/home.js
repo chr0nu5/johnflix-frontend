@@ -62,6 +62,7 @@ export default function Home() {
         height={height}
         more={"/movies"}
         title={"Latest Releases"}
+        playPreview={true}
       />
       <Display
         movies={userWatchList}

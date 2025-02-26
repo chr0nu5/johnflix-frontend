@@ -58,7 +58,14 @@ const Arrows = styled.div`
   }
 `;
 
-export default function Display({ movies, width, height, more, title }) {
+export default function Display({
+  movies,
+  width,
+  height,
+  more,
+  title,
+  playPreview,
+}) {
   const [counter, setCounter] = useState(0);
 
   const next = () => {
@@ -89,6 +96,7 @@ export default function Display({ movies, width, height, more, title }) {
             height={height * 0.3}
             selected={selected}
             screen={width}
+            playPreview={playPreview}
           />
         );
       })}
@@ -100,6 +108,7 @@ export default function Display({ movies, width, height, more, title }) {
           key={movies.length}
           index={movies.length}
           counter={counter}
+          playPreview={playPreview}
         />
       )}
       {title && counter < movies.length - 1 && <Title>{title}</Title>}

@@ -168,6 +168,18 @@ export default function Api() {
     );
   };
 
+  const getEpisode = async (hash) => {
+    return fetch(`${API_URL}/episode/?hash=${hash}`, {
+      method: "GET",
+      headers: getHeaders(),
+    }).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/episode/?hash=${hash}`,
+        method: "GET",
+      })
+    );
+  };
+
   const getSubtitle = async (url) => {
     return fetch(url, {
       method: "GET",
@@ -200,6 +212,26 @@ export default function Api() {
     );
   };
 
+  const userAddToWatchList = async (hash) => {
+    return fetch(`${API_URL}/user/watchlist/save/`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify({ hash }),
+    }).then((response) =>
+      handleResponse(response, { url: `${API_URL}/user/watchlist/save/` })
+    );
+  };
+
+  const setProgress = async (hash, time) => {
+    return fetch(`${API_URL}/user/progress/`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify({ hash, time }),
+    }).then((response) =>
+      handleResponse(response, { url: `${API_URL}/user/progress/` })
+    );
+  };
+
   const logout = () => {
     removeTokens();
   };
@@ -212,11 +244,15 @@ export default function Api() {
     getPlaylists,
 
     getMovie,
+    getEpisode,
     getSubtitle,
 
     getProfile,
     getUserWatchlist,
     getUserWatchinglist,
+    userAddToWatchList,
+
+    setProgress,
 
     login,
     logout,

@@ -165,6 +165,7 @@ export default function Movie({
   selected,
   screen,
   more,
+  playPreview,
 }) {
   const navigate = useNavigate();
 
@@ -186,7 +187,7 @@ export default function Movie({
   };
 
   const play = () => {
-    navigate(`/play/${movie.hash}`);
+    navigate(`/play/${movie.hash}/${movie.type}`);
   };
 
   return more ? (
@@ -312,7 +313,7 @@ export default function Movie({
           </Button>
         </Buttons>
       </MovieInfo>
-      {index === counter && (
+      {index === counter && playPreview && (
         <Video
           autoPlay
           muted

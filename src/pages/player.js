@@ -13,6 +13,8 @@ import {
   ExpandOutlined,
   CompressOutlined,
   ArrowLeftOutlined,
+  HeartOutlined,
+  HeartFilled,
 } from "@ant-design/icons";
 
 import Api from "../libs/api";
@@ -229,9 +231,51 @@ const Subtitle = styled.div`
   }
 `;
 
+const Next = styled.div`
+  position: absolute;
+  width: 240px;
+  height: 134px;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  top: 50%;
+  margin-top: -67px;
+  overflow: hidden;
+  border-radius: 10px;
+  -webkit-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 1);
+  -moz-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 1);
+  box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 1);
+  cursor: pointer;
+  right: 16px;
+  z-index: 99;
+  transition: all 2s;
+  opacity: 0;
+
+  div.title {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: #fff;
+    font-size: 16px;
+  }
+
+  div.content {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    right: 10px;
+    color: #fff;
+    font-size: 16px;
+  }
+`;
+
 export default function Player() {
   const api = Api();
   const { hash } = useParams();
+  const { type } = useParams();
   const navigate = useNavigate();
 
   const [height, setHeight] = useState(window.innerHeight);
@@ -259,6 +303,8 @@ export default function Player() {
   const [subtitle, setSubtitle] = useState([]);
   const [subtitleLine, setSubtitleLine] = useState("");
 
+  const [watchlist, setWatchlist] = useState(false);
+
   const controlsTimeout = useRef(null);
   useEffect(() => {
     if (!isPlaying) {
@@ -281,7 +327,7 @@ export default function Player() {
     if (isPlaying) {
       controlsTimeout.current = setTimeout(() => {
         setControlsVisible(false);
-      }, 3000);
+      }, 2000);
     }
   };
 
@@ -340,6 +386,14 @@ export default function Player() {
 
     const updateTime = () => {
       setCurrentTime(videoRef.current.currentTime);
+
+      if (parseInt(videoRef.current.currentTime) % 10 === 0) {
+        api.setProgress(media.hash, videoRef.current.currentTime);
+      }
+
+      if (videoRef.current.currentTime - 2 >= media.duration && media.next) {
+        navigate(`/play/${media.next.hash}/${media.next.type}`);
+      }
 
       const _subtitleLine = getSubtitleForTime(videoRef.current.currentTime);
       setSubtitleLine(_subtitleLine);
@@ -420,8 +474,15 @@ export default function Player() {
 
   useEffect(() => {
     if (media) {
-      videoRef.current.currentTime = media.progress;
-      setCurrentTime(media.progress);
+      if (media.progress / media.duration > 0.95) {
+        videoRef.current.currentTime = 0;
+        setCurrentTime(0);
+      } else {
+        videoRef.current.currentTime = media.progress;
+        setCurrentTime(media.progress);
+      }
+
+      setWatchlist(media.watchlist);
 
       if (media.subtitle && media.subtitle.vtt) {
         downloadSubtitle(media.subtitle.vtt);
@@ -429,6 +490,10 @@ export default function Player() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [media]);
+
+  const changeWatchList = async () => {
+    await api.userAddToWatchList(media.hash);
+  };
 
   const [currentPlaybackRate, setCurrentPlaybackRate] = useState(1);
   const playbackRate = [
@@ -483,14 +548,27 @@ export default function Player() {
   // end video
 
   const getMedia = async () => {
-    const response = await api.getMovie(hash);
-    setMedia(response.results[0]);
+    if (type === "movie") {
+      const response = await api.getMovie(hash);
+      setMedia(response.results[0]);
+    } else {
+      const response = await api.getEpisode(hash);
+      setMedia(response.results[0]);
+    }
   };
 
   function handleWindowSizeChange() {
     setHeight(window.innerHeight);
     setWidth(window.innerWidth);
   }
+
+  const remainingTimeToShowNext = () => {
+    if (videoRef.current) {
+      return parseInt(media.duration - videoRef.current.currentTime);
+    } else {
+      return 0;
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("resize", handleWindowSizeChange);
@@ -508,16 +586,45 @@ export default function Player() {
 
   return (
     <Holder
-      style={{ width: width, height: height }}
+      style={{
+        width: width,
+        height: height,
+        cursor: controlsVisible ? "auto" : "none",
+      }}
       ref={fullScreenElement}
       onMouseMove={handleMouseMove}>
       {media && (
         <>
+          {media.next && (
+            <Next
+              onClick={() => {
+                navigate(`/play/${media.next.hash}/${media.next.type}`);
+              }}
+              style={{
+                backgroundImage: `url(${media.next.cover})`,
+                opacity: remainingTimeToShowNext() <= 30 ? 1 : 0,
+              }}>
+              <div className="title">
+                Next in <strong>{remainingTimeToShowNext()}</strong>s...
+              </div>
+              <div className="content">
+                <strong>{media.next.title}</strong>{" "}
+                {media.next.type === "episode"
+                  ? `S${media.season}E${media.number}`
+                  : ""}
+              </div>
+            </Next>
+          )}
           <TitleHolder style={{ opacity: controlsVisible ? 1 : 0 }}>
             <BackButton onClick={goHome}>
               <ArrowLeftOutlined />
             </BackButton>
-            <Title style={{ width: width - 100 }}>{media.title}</Title>
+            <Title style={{ width: width - 100 }}>
+              {type === "episode"
+                ? `${media.show} S${media.season}E${media.number} - `
+                : ""}
+              {media.title}
+            </Title>
           </TitleHolder>
           {subtitleLine && subtitleLine.length > 0 ? (
             <Subtitle style={{ bottom: controlsVisible ? 156 : 24 }}>
@@ -546,7 +653,11 @@ export default function Player() {
                 </PlayPauseButton>
               </ControlBlock>
               <ControlBlock className="right">
-                <ControlBlockButton>CC</ControlBlockButton>
+                {media.subtitle ? (
+                  <ControlBlockButton>CC</ControlBlockButton>
+                ) : (
+                  <></>
+                )}
                 <Dropdown
                   placement="top"
                   menu={{
@@ -568,6 +679,13 @@ export default function Player() {
                 </ControlBlockButton>
                 <ControlBlockButton onClick={changeFullScreen}>
                   {fullScreen ? <CompressOutlined /> : <ExpandOutlined />}
+                </ControlBlockButton>
+                <ControlBlockButton
+                  onClick={() => {
+                    changeWatchList(!watchlist);
+                    setWatchlist(!watchlist);
+                  }}>
+                  {watchlist ? <HeartFilled /> : <HeartOutlined />}
                 </ControlBlockButton>
               </ControlBlock>
             </ControlsHolder>

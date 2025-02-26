@@ -61,7 +61,7 @@ function App() {
           <Route path="/tags" element={<Tags />} />
           <Route path="/content/:hash" element={<Content />} />
 
-          <Route path="/play/:hash" element={<Player />} />
+          <Route path="/play/:hash/:type" element={<Player />} />
 
           <Route path="/watchlist" element={<Watchlist />} />
 

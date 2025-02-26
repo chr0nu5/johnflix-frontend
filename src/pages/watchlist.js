@@ -46,7 +46,12 @@ export default function Watchlist() {
   return (
     <Holder>
       <Menu />
-      <Display movies={movies} width={width} height={height} />
+      <Display
+        title={"My watchlist"}
+        movies={movies}
+        width={width}
+        height={height}
+      />
     </Holder>
   );
 }
