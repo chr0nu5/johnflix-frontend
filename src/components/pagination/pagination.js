@@ -3,6 +3,9 @@ import styled from "styled-components";
 
 import Movie from "./movie";
 
+import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+
 const Holder = styled.div`
   position: fixed;
   width: ${(props) => props.width}px;
@@ -51,6 +54,19 @@ const Title = styled.div`
   line-height: 100%;
 `;
 
+const Buttons = styled.div`
+  margin-top: 24px;
+  padding: 32px;
+  padding-top: 0px;
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+`;
+
 export default function Pagination({ width, height, data, getPage }) {
   return data ? (
     <>
@@ -73,6 +89,46 @@ export default function Pagination({ width, height, data, getPage }) {
           );
         })}
       </Elements>
+      {(data.previous || data.next) && (
+        <Buttons>
+          {data.previous ? (
+            <Button
+              onClick={() => {
+                getPage(data.previous);
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+              }}
+              size={"large"}
+              icon={<CaretLeftOutlined />}>
+              PREVIOUS PAGE
+            </Button>
+          ) : (
+            <Button disabled size={"large"} icon={<CaretLeftOutlined />}>
+              PREVIOUS PAGE
+            </Button>
+          )}
+          {data.next ? (
+            <Button
+              onClick={() => {
+                getPage(data.next);
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+              }}
+              size={"large"}
+              icon={<CaretRightOutlined />}>
+              NEXT PAGE
+            </Button>
+          ) : (
+            <Button disabled size={"large"} icon={<CaretRightOutlined />}>
+              NEXT PAGE
+            </Button>
+          )}
+        </Buttons>
+      )}
     </>
   ) : (
     <></>
