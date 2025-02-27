@@ -252,7 +252,6 @@ const Next = styled.div`
   right: 16px;
   z-index: 99;
   transition: all 2s;
-  opacity: 0;
 
   div.title {
     position: absolute;
@@ -595,14 +594,13 @@ export default function Player() {
       onMouseMove={handleMouseMove}>
       {media && (
         <>
-          {media.next && (
+          {media.next && remainingTimeToShowNext() <= 30 && (
             <Next
               onClick={() => {
                 navigate(`/play/${media.next.hash}/${media.next.type}`);
               }}
               style={{
                 backgroundImage: `url(${media.next.cover})`,
-                opacity: remainingTimeToShowNext() <= 30 ? 1 : 0,
               }}>
               <div className="title">
                 Next in <strong>{remainingTimeToShowNext()}</strong>s...
