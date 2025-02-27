@@ -253,7 +253,7 @@ export default function Movie({
         </PlayInfo>
         {movie.media && movie.season && movie.number && (
           <Description style={{ textTransform: "uppercase" }}>
-            {movie.media}{" "}
+            {movie.title}{" "}
             <strong style={{ color: "#ed2517" }}>
               S{movie.season}
               {movie.number}
