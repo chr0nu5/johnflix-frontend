@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 import Api from "../libs/api";
 
-import Display from "../components/display/display";
+import Pagination from "../components/pagination/pagination";
 import Menu from "../components/menu";
 
 const Holder = styled.div`
@@ -24,15 +24,16 @@ export default function Genre() {
     setWidth(window.innerWidth);
   }
 
-  const [movies, setMovies] = useState([]);
+  const [data, setData] = useState(null);
 
-  const getData = async () => {
-    const data = await api.getContent(hash);
-    if (data.results) {
-      setMovies(data.results);
+  const getData = async (url) => {
+    let data = null;
+    if (url) {
+      data = await api.getPage(url);
     } else {
-      setMovies(data);
+      data = await api.getGenre(hash);
     }
+    setData(data);
   };
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function Genre() {
   return (
     <Holder>
       <Menu />
-      <Display movies={movies} width={width} height={height} />
+      <Pagination width={width} height={height} data={data} getPage={getData} />
     </Holder>
   );
 }
