@@ -13,11 +13,10 @@ import Movies from "./pages/movies.js";
 import Genres from "./pages/genres.js";
 import Tags from "./pages/tags.js";
 import Content from "./pages/content.js";
-
 import Watchlist from "./pages/watchlist.js";
-
 import Player from "./pages/player.js";
 import Seasons from "./pages/seasons.js";
+import Genre from "./pages/genre.js";
 
 const useKeyboardListener = () => {
   const [input, setInput] = useState("");
@@ -58,7 +57,10 @@ function App() {
           <Route path="/" element={<Home />} />
 
           <Route path="/movies" element={<Movies />} />
+
           <Route path="/genres" element={<Genres />} />
+          <Route path="/genre/:hash" element={<Genre />} />
+
           <Route path="/tags" element={<Tags />} />
           <Route path="/content/:hash" element={<Content />} />
           <Route path="/seasons/:hash" element={<Seasons />} />
