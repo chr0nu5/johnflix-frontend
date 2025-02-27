@@ -232,6 +232,51 @@ export default function Api() {
     );
   };
 
+  const getContent = async (hash) => {
+    return fetch(
+      `${API_URL}/content/${hash}/medias/?hidden=${hidden}&order_by=name&order_direction=asc`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    ).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/content/${hash}/medias/?hidden=${hidden}&order_by=name&order_direction=asc`,
+        method: "GET",
+      })
+    );
+  };
+
+  const getSeasons = async (hash) => {
+    return fetch(
+      `${API_URL}/media/${hash}/seasons/?hidden=${hidden}&order_by=number&order_direction=asc`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    ).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/media/${hash}/seasons/?hidden=${hidden}&order_by=number&order_direction=asc`,
+        method: "GET",
+      })
+    );
+  };
+
+  const getEpisodes = async (hash) => {
+    return fetch(
+      `${API_URL}/season/${hash}/episodes/?hidden=${hidden}&order_by=number&order_direction=asc`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    ).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/season/${hash}/episodes/?hidden=${hidden}&order_by=number&order_direction=asc`,
+        method: "GET",
+      })
+    );
+  };
+
   const logout = () => {
     removeTokens();
   };
@@ -242,6 +287,10 @@ export default function Api() {
     getRecommended,
     getLatestMovies,
     getPlaylists,
+
+    getContent,
+    getSeasons,
+    getEpisodes,
 
     getMovie,
     getEpisode,

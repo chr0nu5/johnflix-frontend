@@ -79,7 +79,6 @@ export default function Menu() {
   };
 
   const onClick = ({ key }) => {
-    console.log(`Click on item ${key}`);
     if (key === "2") {
       navigate("/watchlist");
     } else if (key === "3") {

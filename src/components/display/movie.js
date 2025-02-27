@@ -187,7 +187,11 @@ export default function Movie({
   };
 
   const play = () => {
-    navigate(`/play/${movie.hash}/${movie.type}`);
+    if (movie.duration) {
+      navigate(`/play/${movie.hash}/${movie.type}`);
+    } else {
+      navigate(`/seasons/${movie.hash}`);
+    }
   };
 
   return more ? (
@@ -236,7 +240,7 @@ export default function Movie({
           opacity: index === counter ? 1 : 0,
           width: screen / 3,
         }}>
-        <Title>{movie.title}</Title>
+        <Title>{movie.title ? movie.title : movie.name}</Title>
         {movie.progress && movie.progress > 0 ? (
           <Progress
             percent={(movie.progress / movie.duration) * 100}
@@ -248,12 +252,16 @@ export default function Movie({
           <></>
         )}
         <PlayInfo>
-          {movie.date && <Tag color="gold">{parseYear(movie.date)}</Tag>}
-          <Tag color="orange">{parseDuration(movie.duration)}</Tag>
+          {movie.date ? <Tag color="gold">{parseYear(movie.date)}</Tag> : <></>}
+          {movie.duration ? (
+            <Tag color="orange">{parseDuration(movie.duration)}</Tag>
+          ) : (
+            <></>
+          )}
         </PlayInfo>
         {movie.media && movie.season && movie.number && (
           <Description style={{ textTransform: "uppercase" }}>
-            {movie.title}{" "}
+            {movie.title ? movie.title : movie.name}{" "}
             <strong style={{ color: "#ed2517" }}>
               S{movie.season}
               {movie.number}
@@ -261,7 +269,9 @@ export default function Movie({
           </Description>
         )}
         {movie.description && <Description>{movie.description}</Description>}
-        {(movie.tag.length > 0 || movie.genre.length > 0) &&
+        {movie.tag &&
+        movie.genre &&
+        (movie.tag.length > 0 || movie.genre.length > 0) &&
         index === counter ? (
           <GenresTags>
             <Avatar.Group
@@ -308,8 +318,8 @@ export default function Movie({
           <Button
             onClick={index === counter ? play : () => {}}
             size={"large"}
-            icon={<CaretRightOutlined />}>
-            PLAY
+            icon={movie.duration ? <CaretRightOutlined /> : null}>
+            {movie.duration ? "PLAY" : "VIEW"}
           </Button>
         </Buttons>
       </MovieInfo>

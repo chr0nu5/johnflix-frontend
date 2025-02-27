@@ -12,7 +12,7 @@ const Holder = styled.div`
   height: 100%;
 `;
 
-export default function Content() {
+export default function Seasons() {
   const api = Api();
   const { hash } = useParams();
 
@@ -24,14 +24,21 @@ export default function Content() {
     setWidth(window.innerWidth);
   }
 
-  const [movies, setMovies] = useState([]);
+  const [seasons, setSeasons] = useState([]);
 
   const getData = async () => {
-    const data = await api.getContent(hash);
+    const data = await api.getSeasons(hash);
     if (data.results) {
-      setMovies(data.results);
-    } else {
-      setMovies(data);
+      const seasonData = await Promise.all(
+        data.results.map(async (season, index) => {
+          const _data = await api.getEpisodes(season.hash);
+          return {
+            season: `Season ${index + 1}`,
+            episodes: _data.results,
+          };
+        })
+      );
+      setSeasons(seasonData);
     }
   };
 
@@ -48,7 +55,15 @@ export default function Content() {
   return (
     <Holder>
       <Menu />
-      <Display movies={movies} width={width} height={height} />
+      {seasons.map((season, index) => (
+        <Display
+          key={index}
+          movies={season.episodes}
+          width={width}
+          height={height}
+          title={season.season}
+        />
+      ))}
     </Holder>
   );
 }
