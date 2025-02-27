@@ -156,6 +156,21 @@ export default function Api() {
     );
   };
 
+  const getGenres = async () => {
+    return fetch(
+      `${API_URL}/genres/?hidden=${hidden}&order_by=name&order_direction=asc`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    ).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/genres/?hidden=${hidden}&order_by=name&order_direction=asc`,
+        method: "GET",
+      })
+    );
+  };
+
   const getMovie = async (hash) => {
     return fetch(`${API_URL}/movies/?hash=${hash}`, {
       method: "GET",
@@ -287,6 +302,8 @@ export default function Api() {
     getRecommended,
     getLatestMovies,
     getPlaylists,
+
+    getGenres,
 
     getContent,
     getSeasons,

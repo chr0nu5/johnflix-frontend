@@ -166,6 +166,7 @@ export default function Movie({
   screen,
   more,
   playPreview,
+  linkTo,
 }) {
   const navigate = useNavigate();
 
@@ -187,10 +188,14 @@ export default function Movie({
   };
 
   const play = () => {
-    if (movie.duration) {
-      navigate(`/play/${movie.hash}/${movie.type}`);
+    if (linkTo) {
+      navigate(`/${linkTo}/${movie.hash}`);
     } else {
-      navigate(`/seasons/${movie.hash}`);
+      if (movie.duration) {
+        navigate(`/play/${movie.hash}/${movie.type}`);
+      } else {
+        navigate(`/seasons/${movie.hash}`);
+      }
     }
   };
 

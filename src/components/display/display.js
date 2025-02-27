@@ -65,6 +65,7 @@ export default function Display({
   more,
   title,
   playPreview,
+  linkTo,
 }) {
   const [counter, setCounter] = useState(0);
 
@@ -97,6 +98,7 @@ export default function Display({
             selected={selected}
             screen={width}
             playPreview={playPreview}
+            linkTo={linkTo}
           />
         );
       })}
@@ -109,6 +111,7 @@ export default function Display({
           index={movies.length}
           counter={counter}
           playPreview={playPreview}
+          linkTo={linkTo}
         />
       )}
       {title && counter < movies.length - 1 && <Title>{title}</Title>}

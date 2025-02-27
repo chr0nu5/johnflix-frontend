@@ -11,7 +11,7 @@ const Holder = styled.div`
   height: 100%;
 `;
 
-export default function Genres() {
+export default function Content() {
   const api = Api();
 
   const [height, setHeight] = useState(window.innerHeight);
@@ -24,8 +24,8 @@ export default function Genres() {
 
   const [movies, setMovies] = useState([]);
 
-  const getRecommended = async () => {
-    const data = await api.getMovies();
+  const getData = async () => {
+    const data = await api.getGenres();
     if (data.results) {
       setMovies(data.results);
     } else {
@@ -39,14 +39,14 @@ export default function Genres() {
   }, []);
 
   useEffect(() => {
-    getRecommended();
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Holder>
       <Menu />
-      <Display movies={movies} width={width} height={height} />
+      <Display movies={movies} width={width} height={height} linkTo={"genre"} />
     </Holder>
   );
 }
