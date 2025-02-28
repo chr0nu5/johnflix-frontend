@@ -1,21 +1,23 @@
-name: ReleasePRD
+name: Release
 
 on:
   push:
     branches: [main]
 
+env:
+  CONTAINER_IMAGE: chr0nu5/base:johnflix-frontend
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Add Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 22
 
       - name: Build
         env:
@@ -25,25 +27,16 @@ jobs:
           npm install
           npm run build
 
-      - name: Release
-        uses: shallwefootball/s3-upload-action@master
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
         with:
-          aws_key_id: ${{ secrets.AWS_KEY }}
-          aws_secret_access_key: ${{ secrets.AWS_SEC}}
-          aws_bucket: ${{ secrets.S3 }}
-          source_dir: "build"
-          destination_dir: ""
+          username: ${{ secrets.DOC_HUB_USR }}
+          password: ${{ secrets.DOC_HUB_PWD }}
 
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.9"
-          cache: "pip"
-      - run: pip install -r requirements.txt
-
-      - name: Clear Cache
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SEC }}
-          DISTRIBUITION: ${{ secrets.CLOUDFRONT }}
+      - name: Build and tag the image
         run: |
-          python clear_cache.py
+          docker build . --file Dockerfile --tag $CONTAINER_IMAGE
+
+      - name: Push the image
+        run: |
+          docker push $CONTAINER_IMAGE
