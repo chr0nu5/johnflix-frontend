@@ -580,7 +580,7 @@ export default function Player() {
   }, [hash]);
 
   const goHome = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   return (

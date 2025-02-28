@@ -71,6 +71,8 @@ const Overlay = styled.div`
     rgba(0, 0, 0, 0) 100%
   );
 
+  backdrop-filter: blur(4px);
+
   &.open {
     pointer-events: all;
     user-select: all;
@@ -103,13 +105,13 @@ const Content = styled.div`
 const Video = styled.video`
   width: 100%;
   height: 40%;
-  background: #000;
+  background: transparent;
   z-index: 0;
   object-fit: cover;
   mask-image: linear-gradient(
     to left,
-    rgba(0, 0, 0, 0) 90%,
-    rgba(0, 0, 0, 1) 70%
+    rgba(0, 0, 0, 0) 99%,
+    rgba(0, 0, 0, 1) 60%
   );
 
   /* For Safari and older WebKit browsers */
@@ -117,8 +119,8 @@ const Video = styled.video`
     linear,
     left 0%,
     left bottom,
-    color-stop(70%, rgba(0, 0, 0, 1)),
-    color-stop(90%, rgba(0, 0, 0, 0))
+    color-stop(60%, rgba(0, 0, 0, 1)),
+    color-stop(99%, rgba(0, 0, 0, 0))
   );
 `;
 
@@ -328,7 +330,7 @@ export default function Movie({ width, height, movie }) {
                               src={genre.cover}
                               onClick={() => {
                                 setOpen(false);
-                                navigate(`/tag/${genre.hash}`);
+                                navigate(`/genre/${genre.hash}`);
                               }}
                               style={{ cursor: "pointer" }}
                             />
