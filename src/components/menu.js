@@ -93,6 +93,7 @@ export default function Menu() {
 
   const getProfile = async () => {
     const response = await api.getProfile();
+    console.log(response.status);
     setUser(response);
   };
 

@@ -47,9 +47,11 @@ export default function Api() {
         }).then(handleResponse);
       } else {
         removeTokens();
+        window.location = "/login";
       }
     }
     if (!response.ok) {
+      window.location = "/login";
       return {};
     }
     return response.json();
