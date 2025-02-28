@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 
 import Api from "../libs/api";
 
-import Display from "../components/display/display";
+import Pagination from "../components/pagination/pagination";
 import Menu from "../components/menu";
 
 const Holder = styled.div`
@@ -11,8 +12,9 @@ const Holder = styled.div`
   height: 100%;
 `;
 
-export default function Content() {
+export default function Tag() {
   const api = Api();
+  const { hash } = useParams();
 
   const [height, setHeight] = useState(window.innerHeight);
   const [width, setWidth] = useState(window.innerWidth);
@@ -22,21 +24,16 @@ export default function Content() {
     setWidth(window.innerWidth);
   }
 
-  const [genres, setGenres] = useState([]);
+  const [data, setData] = useState(null);
 
-  const getData = async (url = null) => {
-    // If no URL is provided, get the first page of tags
-    const data = url ? await api.getPage(url) : await api.getGenres();
-
-    if (data.results) {
-      // Accumulate the tags
-      setGenres((prevTags) => [...prevTags, data]);
-
-      // Continue fetching the next page if it exists
-      if (data.next) {
-        getData(data.next);
-      }
+  const getData = async (url) => {
+    let data = null;
+    if (url) {
+      data = await api.getPage(url);
+    } else {
+      data = await api.getTag(hash);
     }
+    setData(data);
   };
 
   useEffect(() => {
@@ -52,15 +49,7 @@ export default function Content() {
   return (
     <Holder>
       <Menu />
-      {genres.map((page, index) => (
-        <Display
-          key={index}
-          movies={page.results}
-          width={width}
-          height={height}
-          linkTo={"genre"}
-        />
-      ))}
+      <Pagination width={width} height={height} data={data} getPage={getData} />
     </Holder>
   );
 }

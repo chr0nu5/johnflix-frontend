@@ -17,6 +17,7 @@ import Watchlist from "./pages/watchlist.js";
 import Player from "./pages/player.js";
 import Seasons from "./pages/seasons.js";
 import Genre from "./pages/genre.js";
+import Tag from "./pages/tag.js";
 
 const useKeyboardListener = () => {
   const [input, setInput] = useState("");
@@ -62,6 +63,8 @@ function App() {
           <Route path="/genre/:hash" element={<Genre />} />
 
           <Route path="/tags" element={<Tags />} />
+          <Route path="/tag/:hash" element={<Tag />} />
+
           <Route path="/content/:hash" element={<Content />} />
           <Route path="/seasons/:hash" element={<Seasons />} />
 

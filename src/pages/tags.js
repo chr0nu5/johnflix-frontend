@@ -11,7 +11,7 @@ const Holder = styled.div`
   height: 100%;
 `;
 
-export default function Genres() {
+export default function Tags() {
   const api = Api();
 
   const [height, setHeight] = useState(window.innerHeight);
@@ -22,14 +22,20 @@ export default function Genres() {
     setWidth(window.innerWidth);
   }
 
-  const [movies, setMovies] = useState([]);
+  const [tags, setTags] = useState([]);
 
-  const getRecommended = async () => {
-    const data = await api.getMovies();
+  const getData = async (url = null) => {
+    // If no URL is provided, get the first page of tags
+    const data = url ? await api.getPage(url) : await api.getTags();
+
     if (data.results) {
-      setMovies(data.results);
-    } else {
-      setMovies(data);
+      // Accumulate the tags
+      setTags((prevTags) => [...prevTags, data]);
+
+      // Continue fetching the next page if it exists
+      if (data.next) {
+        getData(data.next);
+      }
     }
   };
 
@@ -39,14 +45,22 @@ export default function Genres() {
   }, []);
 
   useEffect(() => {
-    getRecommended();
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Holder>
       <Menu />
-      <Display movies={movies} width={width} height={height} />
+      {tags.map((page, index) => (
+        <Display
+          key={index}
+          movies={page.results}
+          width={width}
+          height={height}
+          linkTo={"tag"}
+        />
+      ))}
     </Holder>
   );
 }

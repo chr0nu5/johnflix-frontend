@@ -94,12 +94,12 @@ export default function Api() {
   };
 
   const getProfile = async () => {
-    return fetch(`${API_URL}/user/profile/`, {
+    return fetch(`${API_URL}/user/profile/?hidden=${hidden}`, {
       method: "GET",
       headers: getHeaders(),
     }).then((response) =>
       handleResponse(response, {
-        url: `${API_URL}/user/profile/`,
+        url: `${API_URL}/user/profile/?hidden=${hidden}`,
         method: "GET",
       })
     );
@@ -158,14 +158,14 @@ export default function Api() {
 
   const getGenres = async () => {
     return fetch(
-      `${API_URL}/genres/?hidden=${hidden}&order_by=name&order_direction=asc`,
+      `${API_URL}/genres/?hidden=${hidden}&order_by=name&order_direction=asc&limit=10`,
       {
         method: "GET",
         headers: getHeaders(),
       }
     ).then((response) =>
       handleResponse(response, {
-        url: `${API_URL}/genres/?hidden=${hidden}&order_by=name&order_direction=asc`,
+        url: `${API_URL}/genres/?hidden=${hidden}&order_by=name&order_direction=asc&limit=10`,
         method: "GET",
       })
     );
@@ -181,6 +181,36 @@ export default function Api() {
     ).then((response) =>
       handleResponse(response, {
         url: `${API_URL}/genre/${hash}/movies?hidden=${hidden}&order_by=date&order_direction=desc`,
+        method: "GET",
+      })
+    );
+  };
+
+  const getTags = async () => {
+    return fetch(
+      `${API_URL}/tags/?hidden=${hidden}&order_by=name&order_direction=asc&limit=10`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    ).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/tags/?hidden=${hidden}&order_by=name&order_direction=asc&limit=10`,
+        method: "GET",
+      })
+    );
+  };
+
+  const getTag = async (hash) => {
+    return fetch(
+      `${API_URL}/tag/${hash}/movies?hidden=${hidden}&order_by=date&order_direction=desc`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    ).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/tag/${hash}/movies?hidden=${hidden}&order_by=date&order_direction=desc`,
         method: "GET",
       })
     );
@@ -332,6 +362,9 @@ export default function Api() {
 
     getGenres,
     getGenre,
+
+    getTags,
+    getTag,
 
     getPage,
 
