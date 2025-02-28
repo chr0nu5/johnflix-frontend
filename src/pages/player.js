@@ -33,6 +33,7 @@ const Video = styled.video`
   height: 100%;
   background: transparent;
   z-index: 0;
+  transition: all 2s;
 `;
 
 const Controls = styled.div`
@@ -271,6 +272,65 @@ const Next = styled.div`
   }
 `;
 
+const Recommended = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 1s;
+
+  &.show {
+    opacity: 1;
+    pointer-events: all;
+    top: 50%;
+  }
+`;
+
+const RecommendedItem = styled.div`
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url(${(props) => props.background});
+  overflow: hidden;
+  border-radius: 8px;
+  -webkit-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  width: 320px;
+  height: 179px;
+  position: relative;
+`;
+
+const RecommendedItemTitle = styled.div`
+  font-size: 16px;
+  font-family: "Anton", serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 100%;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  right: 4px;
+  text-shadow: 0px 0px 20px #000000;
+`;
+
 export default function Player() {
   const api = Api();
   const { hash } = useParams();
@@ -309,7 +369,6 @@ export default function Player() {
     let _volume = localStorage.getItem("volume");
     if (_volume || _volume === 0) {
       _volume = parseFloat(_volume);
-      console.log(_volume);
       setVolume(_volume);
     }
 
@@ -582,6 +641,15 @@ export default function Player() {
     }
   };
 
+  const [related, setRelated] = useState([]);
+
+  const getRelated = async () => {
+    if (type === "movie") {
+      const response = await api.getRelatedMovieByHash(hash);
+      setRelated(response);
+    }
+  };
+
   function handleWindowSizeChange() {
     setHeight(window.innerHeight);
     setWidth(window.innerWidth);
@@ -602,6 +670,7 @@ export default function Player() {
 
   useEffect(() => {
     getMedia();
+    getRelated();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hash]);
 
@@ -733,12 +802,27 @@ export default function Player() {
             ref={videoRef}
             preload="auto"
             poster={media.cover}
-            style={{ objectFit: fillScreen ? "cover" : "contain" }}
+            style={{
+              objectFit: fillScreen ? "cover" : "contain",
+              opacity: isPlaying ? 1 : 0.3,
+            }}
             onClick={playPauseAction}>
             <source src={media.media} type="video/mp4" />
           </Video>
         </>
       )}
+      <Recommended className={`${!isPlaying && currentTime > 0 ? "show" : ""}`}>
+        {related.map((item, index) => {
+          return (
+            <RecommendedItem
+              key={index}
+              background={item.cover}
+              onClick={() => navigate(`/play/${item.hash}/movie`)}>
+              <RecommendedItemTitle>{item.title}</RecommendedItemTitle>
+            </RecommendedItem>
+          );
+        })}
+      </Recommended>
     </Holder>
   );
 }

@@ -255,6 +255,21 @@ export default function Api() {
     );
   };
 
+  const getRelatedMovieByHash = async (hash) => {
+    return fetch(
+      `${API_URL}/recommended/?hidden=${hidden}&hash=${hash}&limit=3`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    ).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/recommended/?hidden=${hidden}&hash=${hash}&limit=3`,
+        method: "GET",
+      })
+    );
+  };
+
   const getSubtitle = async (url) => {
     return fetch(url, {
       method: "GET",
@@ -410,6 +425,8 @@ export default function Api() {
     getContent,
     getSeasons,
     getEpisodes,
+
+    getRelatedMovieByHash,
 
     getMovie,
     getEpisode,
