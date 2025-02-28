@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { CloseCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { Button, Tag, Progress, Avatar, Tooltip } from "antd";
+
+import { useNavigate } from "react-router-dom";
 
 const Holder = styled.div`
   position: relative;
@@ -25,14 +28,14 @@ const Details = styled.div`
   background-repeat: no-repeat;
   background-image: url(${(props) => props.background});
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 8px;
   -webkit-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.5);
   box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   width: 100%;
   height: 100%;
-  z-index: 96;
+  z-index: 89;
   overflow: scroll;
 `;
 
@@ -52,6 +55,29 @@ const Close = styled.div`
   }
 `;
 
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 98;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 10%,
+    rgba(0, 0, 0, 0) 100%
+  );
+
+  &.open {
+    pointer-events: all;
+    user-select: all;
+    opacity: 1;
+  }
+`;
+
 const Content = styled.div`
   position: fixed;
   top: 50%;
@@ -64,6 +90,8 @@ const Content = styled.div`
   pointer-events: none;
   user-select: none;
   opacity: 0;
+  overflow: hidden;
+  border-radius: 8px;
 
   &.open {
     pointer-events: all;
@@ -72,28 +100,79 @@ const Content = styled.div`
   }
 `;
 
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  z-index: 98;
+const Video = styled.video`
+  width: 100%;
+  height: 40%;
+  background: #000;
+  z-index: 0;
+  object-fit: cover;
+  mask-image: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0) 90%,
+    rgba(0, 0, 0, 1) 70%
+  );
+
+  /* For Safari and older WebKit browsers */
+  -webkit-mask-image: -webkit-gradient(
+    linear,
+    left 0%,
+    left bottom,
+    color-stop(70%, rgba(0, 0, 0, 1)),
+    color-stop(90%, rgba(0, 0, 0, 0))
+  );
+`;
+
+const Info = styled.div`
+  padding: 32px;
+`;
+
+const Title = styled.div`
+  font-size: 48px;
+  font-family: "Anton", serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 100%;
   pointer-events: none;
   user-select: none;
-  opacity: 0;
+`;
 
-  &.open {
-    pointer-events: all;
-    user-select: all;
-    opacity: 1;
-  }
+const PlayInfo = styled.div`
+  pointer-events: none;
+`;
+const Description = styled.div`
+  margin-top: 24px;
+  pointer-events: none;
+`;
+const GenresTags = styled.div`
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 8px;
 `;
 
 export default function Movie({ width, height, movie }) {
   const [open, setOpen] = useState(false);
-
+  const navigate = useNavigate();
   const [clone, setClone] = useState(null);
+
+  const parseYear = (date) => {
+    return `${date}`.substr(0, 4);
+  };
+
+  const parseDuration = (d) => {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+
+    var hDisplay = h > 0 ? h + (h === 1 ? "h " : "h ") : "";
+    var mDisplay = m > 0 ? m + (m === 1 ? "m" : "m") : "";
+    return hDisplay + mDisplay;
+  };
+
+  const play = () => {
+    navigate(`/play/${movie.hash}/${movie.type}`);
+  };
 
   const animateToCenter = (event) => {
     const target = event.currentTarget;
@@ -154,6 +233,114 @@ export default function Movie({ width, height, movie }) {
         <Close onClick={() => setOpen(false)}>
           <CloseCircleOutlined />
         </Close>
+        {open && (
+          <>
+            <Video
+              autoPlay
+              playsInline
+              loop
+              preload="auto"
+              disablePictureInPicture>
+              <source
+                src={`${movie.media}#t=${(movie.duration / 100) * 40},${
+                  (movie.duration / 100) * 50
+                }`}
+                type="video/mp4"
+              />
+            </Video>
+            <Info>
+              <Title>{movie.title ? movie.title : movie.name}</Title>
+              {movie.progress && movie.progress > 0 ? (
+                <Progress
+                  percent={(movie.progress / movie.duration) * 100}
+                  status="active"
+                  showInfo={false}
+                  strokeColor={"#fff"}
+                />
+              ) : (
+                <></>
+              )}
+              <PlayInfo>
+                {movie.date ? (
+                  <Tag color="gold">{parseYear(movie.date)}</Tag>
+                ) : (
+                  <></>
+                )}
+                {movie.duration ? (
+                  <Tag color="orange">{parseDuration(movie.duration)}</Tag>
+                ) : (
+                  <></>
+                )}
+              </PlayInfo>
+              {movie.media && movie.season && movie.number && (
+                <Description style={{ textTransform: "uppercase" }}>
+                  {movie.title ? movie.title : movie.name}{" "}
+                  <strong style={{ color: "#ed2517" }}>
+                    S{movie.season}
+                    {movie.number}
+                  </strong>
+                </Description>
+              )}
+              {movie.description && (
+                <Description>{movie.description}</Description>
+              )}
+              <Button
+                onClick={() => {
+                  setOpen(false);
+                  play();
+                }}
+                size={"large"}
+                style={{ marginTop: "24px" }}
+                icon={<CaretRightOutlined />}>
+                {movie.progress && movie.progress > 0 ? "RESUME" : "PLAY"}
+              </Button>
+              {movie.tag &&
+                movie.genre &&
+                (movie.tag.length > 0 || movie.genre.length > 0) && (
+                  <GenresTags>
+                    <Avatar.Group
+                      max={{
+                        count: 5,
+                      }}>
+                      {movie.tag.map((tag) => {
+                        return (
+                          <Tooltip title={tag.name} placement="top">
+                            <Avatar
+                              src={tag.cover}
+                              onClick={() => {
+                                setOpen(false);
+                                navigate(`/tag/${tag.hash}`);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </Tooltip>
+                        );
+                      })}
+                    </Avatar.Group>
+                    <Avatar.Group
+                      max={{
+                        count: 5,
+                      }}>
+                      {movie.genre.map((genre) => {
+                        return (
+                          <Tooltip title={genre.name} placement="top">
+                            <Avatar
+                              src={genre.cover}
+                              onClick={() => {
+                                setOpen(false);
+                                navigate(`/tag/${genre.hash}`);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </Tooltip>
+                        );
+                      })}
+                    </Avatar.Group>
+                  </GenresTags>
+                )}
+            </Info>
+          </>
+        )}
       </Content>
     </>
   );

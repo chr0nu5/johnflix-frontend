@@ -307,7 +307,7 @@ export default function Movie({
                     <Avatar
                       src={genre.cover}
                       onClick={() => {
-                        navigate(`/tag/${genre.hash}`);
+                        navigate(`/genre/${genre.hash}`);
                       }}
                       style={{ cursor: "pointer" }}
                     />

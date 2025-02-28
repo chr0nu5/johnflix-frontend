@@ -20,7 +20,7 @@ const Holder = styled.div`
     rgba(0, 0, 0, 1) 0%,
     rgba(0, 0, 0, 0) 100%
   );
-  z-index: 99;
+  z-index: 90;
   display: flex;
   align-items: center;
   justify-content: space-between;
