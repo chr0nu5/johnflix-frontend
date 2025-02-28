@@ -220,6 +220,10 @@ export default function Api() {
   };
 
   const getPage = async (url) => {
+    if ("https" in API_URL) {
+      url = url.replace("http://", "https://");
+    }
+
     return fetch(`${url}`, {
       method: "GET",
       headers: getHeaders(),
