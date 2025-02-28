@@ -304,6 +304,28 @@ export default function Player() {
 
   const [watchlist, setWatchlist] = useState(false);
 
+  // initial config
+  useEffect(() => {
+    let _volume = localStorage.getItem("volume");
+    if (_volume || _volume === 0) {
+      _volume = parseFloat(_volume);
+      console.log(_volume);
+      setVolume(_volume);
+    }
+
+    let _speed = localStorage.getItem("speed");
+    if (_speed) {
+      setCurrentPlaybackRate(_speed);
+    }
+
+    let _fillscreen = localStorage.getItem("fillscreen");
+    if (_fillscreen) {
+      setFillScreen(_fillscreen);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const controlsTimeout = useRef(null);
   useEffect(() => {
     if (!isPlaying) {
@@ -353,6 +375,7 @@ export default function Player() {
 
   const changeVolume = (volume) => {
     videoRef.current.volume = volume;
+    localStorage.setItem("volume", volume);
     setVolume(volume);
   };
 
@@ -523,13 +546,16 @@ export default function Player() {
     const values = [0, 1, 1.25, 1.5, 1.75, 2];
     const finalPlaybackRate = values[selected];
     videoRef.current.playbackRate = finalPlaybackRate;
+    localStorage.setItem("speed", finalPlaybackRate);
     setCurrentPlaybackRate(`${finalPlaybackRate}`);
   };
 
   const changeFillScreen = () => {
     if (fillScreen) {
+      localStorage.setItem("fillscreen", false);
       setFillScreen(false);
     } else {
+      localStorage.setItem("fillscreen", true);
       setFillScreen(true);
     }
   };
@@ -661,7 +687,7 @@ export default function Player() {
                   menu={{
                     items: playbackRate,
                     selectable: true,
-                    defaultSelectedKeys: ["1"],
+                    defaultSelectedKeys: [currentPlaybackRate],
                     onClick: changePlaybackRate,
                   }}>
                   <ControlBlockButton>

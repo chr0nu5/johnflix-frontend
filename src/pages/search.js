@@ -16,11 +16,11 @@ const Holder = styled.div`
 
 const SearchFields = styled.div`
   padding: 24px;
-  position: absolute;
+  position: fixed;
   right: 64px;
   top: 0px;
   width: 50%;
-  z-index: 99;
+  z-index: 90;
   text-align: right;
 `;
 

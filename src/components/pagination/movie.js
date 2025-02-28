@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { CloseCircleOutlined, CaretRightOutlined } from "@ant-design/icons";
-import { Button, Tag, Progress, Avatar, Tooltip } from "antd";
+import { Button, Tag, Progress, Avatar, Tooltip, Spin } from "antd";
 
 import { useNavigate } from "react-router-dom";
 
@@ -189,7 +189,21 @@ const GenresTags = styled.div`
   gap: 8px;
 `;
 
+const Spinner = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export default function Movie({ width, height, movie, photos }) {
+  const [loading, setLoading] = useState(true);
+
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [clone, setClone] = useState(null);
@@ -248,12 +262,6 @@ export default function Movie({ width, height, movie, photos }) {
     setTimeout(() => {
       setOpen(true);
     }, 1000);
-
-    // Clean up after animation
-    // clone.addEventListener("transitionend", () => {
-    //   document.body.removeChild(clone);
-    //   setSelectedMovie(movie);
-    // });
   };
 
   useEffect(() => {
@@ -264,15 +272,28 @@ export default function Movie({ width, height, movie, photos }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
+  useEffect(() => {
+    const img = new Image();
+    img.src = movie.cover ? movie.cover : movie.photo;
+    img.onload = () => setLoading(false);
+    img.onerror = () => setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <Holder width={width} height={height}>
         <Details
-          background={movie.cover ? movie.cover : movie.photo}
+          background={loading ? null : movie.cover ? movie.cover : movie.photo}
           onClick={(event) => {
             animateToCenter(event);
           }}
           className={`${photos ? "photos" : ""}`}>
+          {loading && (
+            <Spinner>
+              <Spin size="large" />
+            </Spinner>
+          )}
           <SubTitle>{movie.title ? movie.title : null}</SubTitle>
         </Details>
       </Holder>
