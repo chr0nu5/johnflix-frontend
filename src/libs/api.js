@@ -349,6 +349,30 @@ export default function Api() {
     );
   };
 
+  const getGalleries = async () => {
+    return fetch(`${API_URL}/galleries/?limit=16`, {
+      method: "GET",
+      headers: getHeaders(),
+    }).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/galleries/?limit=16`,
+        method: "GET",
+      })
+    );
+  };
+
+  const getGallery = async (hash) => {
+    return fetch(`${API_URL}/gallery/${hash}/photos/?limit=40`, {
+      method: "GET",
+      headers: getHeaders(),
+    }).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/gallery/${hash}/photos/?limit=40`,
+        method: "GET",
+      })
+    );
+  };
+
   const logout = () => {
     removeTokens();
   };
@@ -382,6 +406,9 @@ export default function Api() {
     userAddToWatchList,
 
     setProgress,
+
+    getGalleries,
+    getGallery,
 
     login,
     logout,

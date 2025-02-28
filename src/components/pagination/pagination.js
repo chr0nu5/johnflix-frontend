@@ -67,7 +67,7 @@ const Buttons = styled.div`
   gap: 32px;
 `;
 
-export default function Pagination({ width, height, data, getPage }) {
+export default function Pagination({ width, height, data, getPage, photos }) {
   return data ? (
     <>
       <Holder
@@ -75,7 +75,11 @@ export default function Pagination({ width, height, data, getPage }) {
         height={height}
         background={data.results.info.cover}>
         <Blur />
-        <Title>{data.results.info.name}</Title>
+        <Title>
+          {data.results.info.name
+            ? data.results.info.name
+            : data.results.info.title}
+        </Title>
       </Holder>
       <Elements width={width} margin={height - (width / 2) * 0.56}>
         {data.results.movies.map((movie) => {
@@ -85,6 +89,7 @@ export default function Pagination({ width, height, data, getPage }) {
               height={(width / 4) * 0.56}
               key={movie.hash}
               movie={movie}
+              photos={photos}
             />
           );
         })}

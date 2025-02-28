@@ -37,6 +37,13 @@ const Details = styled.div`
   height: 100%;
   z-index: 89;
   overflow: scroll;
+
+  &.photos {
+    background-size: contain;
+    -webkit-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0);
+    -moz-box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0);
+    box-shadow: 10px 10px 30px 0px rgba(0, 0, 0, 0);
+  }
 `;
 
 const Close = styled.div`
@@ -94,6 +101,16 @@ const Content = styled.div`
   opacity: 0;
   overflow: hidden;
   border-radius: 8px;
+
+  &.photos {
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 96;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    transform: none;
+  }
 
   &.open {
     pointer-events: all;
@@ -153,7 +170,7 @@ const GenresTags = styled.div`
   gap: 8px;
 `;
 
-export default function Movie({ width, height, movie }) {
+export default function Movie({ width, height, movie, photos }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [clone, setClone] = useState(null);
@@ -193,11 +210,18 @@ export default function Movie({ width, height, movie }) {
     document.body.appendChild(_clone);
 
     setTimeout(() => {
-      _clone.style.top = "50%";
-      _clone.style.left = "50%";
-      _clone.style.width = "50%";
-      _clone.style.height = "90%";
-      _clone.style.transform = "translate(-50%, -50%)";
+      if (photos) {
+        _clone.style.top = `10%`;
+        _clone.style.left = `10%`;
+        _clone.style.width = `80%`;
+        _clone.style.height = `80%`;
+      } else {
+        _clone.style.top = "50%";
+        _clone.style.left = "50%";
+        _clone.style.width = "50%";
+        _clone.style.height = "90%";
+        _clone.style.transform = "translate(-50%, -50%)";
+      }
 
       setClone(_clone);
     }, 1);
@@ -225,17 +249,24 @@ export default function Movie({ width, height, movie }) {
     <>
       <Holder width={width} height={height}>
         <Details
-          background={movie.cover}
+          background={movie.cover ? movie.cover : movie.photo}
           onClick={(event) => {
             animateToCenter(event);
-          }}></Details>
+          }}
+          className={`${photos ? "photos" : ""}`}
+        />
       </Holder>
-      <Overlay className={open ? "open" : ""} onClick={() => setOpen(false)} />
-      <Content className={open ? "open" : ""}>
+      {!photos && (
+        <Overlay
+          className={open ? "open" : ""}
+          onClick={() => setOpen(false)}
+        />
+      )}
+      <Content className={`${open ? "open" : ""} ${photos ? "photos" : ""}`}>
         <Close onClick={() => setOpen(false)}>
           <CloseCircleOutlined />
         </Close>
-        {open && (
+        {open && !photos && (
           <>
             <Video
               autoPlay
