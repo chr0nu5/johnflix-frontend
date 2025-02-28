@@ -57,7 +57,7 @@ export default function Tags() {
           key={index}
           movies={page.results}
           width={width}
-          height={height}
+          height={(height / 4) * 3}
           linkTo={"tag"}
         />
       ))}

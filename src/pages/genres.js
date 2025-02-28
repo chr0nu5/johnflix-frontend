@@ -57,7 +57,7 @@ export default function Content() {
           key={index}
           movies={page.results}
           width={width}
-          height={height}
+          height={(height / 4) * 3}
           linkTo={"genre"}
         />
       ))}

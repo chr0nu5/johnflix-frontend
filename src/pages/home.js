@@ -59,7 +59,7 @@ export default function Home() {
       <Display
         movies={latestMovies}
         width={width}
-        height={height}
+        height={(height / 4) * 3}
         more={"/movies"}
         title={"Latest Releases"}
         playPreview={true}
@@ -67,7 +67,7 @@ export default function Home() {
       <Display
         movies={userWatchList}
         width={width}
-        height={height}
+        height={(height / 4) * 3}
         title={"Continue Watching"}
       />
       {playlists.map((playlist, index) => {
@@ -76,7 +76,7 @@ export default function Home() {
             key={index}
             movies={playlist.movies}
             width={width}
-            height={height}
+            height={(height / 4) * 3}
             title={playlist.name}
           />
         );
