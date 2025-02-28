@@ -220,7 +220,7 @@ export default function Api() {
   };
 
   const getPage = async (url) => {
-    if ("https" in API_URL) {
+    if (API_URL.includes("https")) {
       url = url.replace("http://", "https://");
     }
 
