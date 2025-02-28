@@ -24,14 +24,20 @@ export default function Content() {
     setWidth(window.innerWidth);
   }
 
-  const [movies, setMovies] = useState([]);
+  const [contents, setContents] = useState([]);
 
-  const getData = async () => {
-    const data = await api.getContent(hash);
+  const getData = async (url = null) => {
+    // If no URL is provided, get the first page of tags
+    const data = url ? await api.getPage(url) : await api.getContent(hash);
+
     if (data.results) {
-      setMovies(data.results);
-    } else {
-      setMovies(data);
+      // Accumulate the tags
+      setContents((prevTags) => [...prevTags, data.results]);
+
+      // Continue fetching the next page if it exists
+      if (data.next) {
+        getData(data.next);
+      }
     }
   };
 
@@ -48,7 +54,11 @@ export default function Content() {
   return (
     <Holder>
       <Menu />
-      <Display movies={movies} width={width} height={height} />
+      {contents.map((content, index) => {
+        return (
+          <Display movies={content} width={width} height={(height / 4) * 3} />
+        );
+      })}
     </Holder>
   );
 }

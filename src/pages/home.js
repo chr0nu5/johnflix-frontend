@@ -28,7 +28,7 @@ export default function Home() {
 
   const getLatestMovies = async () => {
     const data = await api.getLatestMovies();
-    setLatestMovies(data.results);
+    setLatestMovies(data.results.movies);
   };
 
   const getUserWatchingList = async () => {

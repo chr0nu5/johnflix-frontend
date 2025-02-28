@@ -133,12 +133,15 @@ export default function Api() {
   };
 
   const getMovies = async () => {
-    return fetch(`${API_URL}/movies/?hidden=${hidden}&limit=8`, {
-      method: "GET",
-      headers: getHeaders(),
-    }).then((response) =>
+    return fetch(
+      `${API_URL}/movies/?hidden=${hidden}&order_by=date&order_direction=desc`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    ).then((response) =>
       handleResponse(response, {
-        url: `${API_URL}/movies/?hidden=${hidden}&limit=8`,
+        url: `${API_URL}/movies/?hidden=${hidden}&order_by=date&order_direction=desc`,
         method: "GET",
       })
     );
@@ -306,14 +309,14 @@ export default function Api() {
 
   const getContent = async (hash) => {
     return fetch(
-      `${API_URL}/content/${hash}/medias/?hidden=${hidden}&order_by=name&order_direction=asc`,
+      `${API_URL}/content/${hash}/medias/?hidden=${hidden}&order_by=name&order_direction=asc&limit=5`,
       {
         method: "GET",
         headers: getHeaders(),
       }
     ).then((response) =>
       handleResponse(response, {
-        url: `${API_URL}/content/${hash}/medias/?hidden=${hidden}&order_by=name&order_direction=asc`,
+        url: `${API_URL}/content/${hash}/medias/?hidden=${hidden}&order_by=name&order_direction=asc&limit=5`,
         method: "GET",
       })
     );
@@ -373,6 +376,18 @@ export default function Api() {
     );
   };
 
+  const search = async (s) => {
+    return fetch(`${API_URL}/search/?search=${s}&hidden=${hidden}`, {
+      method: "GET",
+      headers: getHeaders(),
+    }).then((response) =>
+      handleResponse(response, {
+        url: `${API_URL}/search/?search=${s}&hidden=${hidden}`,
+        method: "GET",
+      })
+    );
+  };
+
   const logout = () => {
     removeTokens();
   };
@@ -409,6 +424,8 @@ export default function Api() {
 
     getGalleries,
     getGallery,
+
+    search,
 
     login,
     logout,

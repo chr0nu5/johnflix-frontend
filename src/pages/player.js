@@ -549,7 +549,7 @@ export default function Player() {
   const getMedia = async () => {
     if (type === "movie") {
       const response = await api.getMovie(hash);
-      setMedia(response.results[0]);
+      setMedia(response.results.movies[0]);
     } else {
       const response = await api.getEpisode(hash);
       setMedia(response.results[0]);

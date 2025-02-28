@@ -20,6 +20,7 @@ import Genre from "./pages/genre.js";
 import Tag from "./pages/tag.js";
 import Galleries from "./pages/galleries.js";
 import Gallery from "./pages/photos.js";
+import Search from "./pages/search.js";
 
 const useKeyboardListener = () => {
   const [input, setInput] = useState("");
@@ -50,8 +51,16 @@ const useKeyboardListener = () => {
 
 function App() {
   const location = useLocation();
+  const { pathname } = useLocation();
 
   useKeyboardListener();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [pathname]);
 
   return (
     <TransitionGroup>
@@ -76,6 +85,8 @@ function App() {
 
           <Route path="/galleries" element={<Galleries />} />
           <Route path="/gallery/:hash" element={<Gallery />} />
+
+          <Route path="/search" element={<Search />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Blank />} />

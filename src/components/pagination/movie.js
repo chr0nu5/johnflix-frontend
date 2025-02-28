@@ -155,6 +155,25 @@ const Title = styled.div`
   user-select: none;
 `;
 
+const SubTitle = styled.div`
+  font-size: 24px;
+  font-family: "Anton", serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 100%;
+  pointer-events: none;
+  user-select: none;
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  right: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  text-shadow: 0px 0px 30px #000000;
+`;
+
 const PlayInfo = styled.div`
   pointer-events: none;
 `;
@@ -253,8 +272,9 @@ export default function Movie({ width, height, movie, photos }) {
           onClick={(event) => {
             animateToCenter(event);
           }}
-          className={`${photos ? "photos" : ""}`}
-        />
+          className={`${photos ? "photos" : ""}`}>
+          <SubTitle>{movie.title ? movie.title : null}</SubTitle>
+        </Details>
       </Holder>
       {!photos && (
         <Overlay
